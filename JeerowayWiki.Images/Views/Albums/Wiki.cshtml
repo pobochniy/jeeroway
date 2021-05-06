@@ -1,0 +1,60 @@
+﻿@using Atheneum.EntityImg;
+@model IEnumerable<Album>
+
+<h4>
+    Albums Wiki
+    @if (User.HasRole(RoleEnum.imgManagement))
+    {
+        <a style="right:0px;float:right;" class="btn btn-primary" href="/Albums/Update">
+            <i class="bi-plus"></i>
+            Добавить альбом
+        </a>
+    }
+</h4>
+
+
+<table style="width: 100%;">
+    <thead>
+        <tr>
+            <th style="width:30%">Name</th>
+            <th style="width:60%">Description</th>
+            <th style="min-width:90px">Created</th>
+            <th></th>
+            @if (User.HasRole(RoleEnum.imgManagement))
+            {
+                <th></th>
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Album item in Model)
+        {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.Created.ToString("dd.MM.yyyy")</td>
+            <td>
+                <a class="btn btn-info" href="/Albums/Show/@item.Id">
+                    <i class="bi-eye"></i>
+                </a>
+            </td>
+            @if (User.HasRole(RoleEnum.imgManagement))
+            {
+                <td>
+                    <a class="btn btn-warning" href="/Albums/Update?albumId=@item.Id">
+                        <i class="bi-pencil"></i>
+                    </a>
+                </td>
+                <td>
+                    <form action="/Albums/Delete?albumId=@item.Id" method="post" onsubmit="return confirm('Вы - администратор?')">
+                        <button type="submit" class="btn btn-danger" href="#">
+                            <i class="bi-trash-fill"></i>
+                        </button>
+                    </form>
+                </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

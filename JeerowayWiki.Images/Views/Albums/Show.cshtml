@@ -1,0 +1,124 @@
+﻿@using Atheneum.EntityImg;
+@model Album
+
+<h4>
+    Альбом @Model.Name
+    @if (User.HasRole(RoleEnum.imgManagement))
+    {
+        <a style="right:0px;float:right;" class="btn btn-primary" href="/Img/Insert?albumId=@Model.Id">
+            <i class="bi-plus"></i>
+            Добавить фото
+        </a>
+    }
+</h4>
+
+<style>
+    .photo-wrapper {
+    }
+
+    .photo-card {
+        float: left;
+        display: inline-block;
+        border: 1px solid gray;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+    }
+
+        .photo-card .photo-img {
+            position: relative;
+            width: 230px;
+            height: 150px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+            .photo-card .photo-img a {
+                text-decoration: none;
+                color: black;
+            }
+
+                .photo-card .photo-img a img {
+                    text-decoration: none;
+                    color: black;
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                    right: -9999px;
+                    bottom: -9999px;
+                    margin: auto;
+                    max-width: 500px;
+                    max-height: 500px;
+                }
+
+        .photo-card .photo-title {
+            background-color: lightgray;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+        }
+
+    .photo-controls {
+        padding-top: 10px;
+    }
+</style>
+
+<div class="photo-wrapper">
+    @foreach (Img item in Model.Imgs)
+    {
+        <div class="photo-card">
+            <div class="photo-img">
+                <a href="/Albums/Photo/@item.Id">
+                    <img src="/Img/View/@Model.Id/@item.Id" />
+                    <div class="photo-title">@item.Title</div>
+                </a>
+            </div>
+            @if (User.HasRole(RoleEnum.imgManagement))
+            {
+                <div class="photo-controls">
+                    <a class="btn btn-info" href="/Albums/Photo/@item.Id">
+                        <i class="bi-eye"></i>
+                    </a>
+                    <a class="btn btn-warning" href="/Img/Edit?imgId=@item.Id">
+                        <i class="bi-pencil"></i>
+                    </a>
+                    <a class="btn btn-danger" href="/Img/Delete?id=@(item.Id)&albumId=@(Model.Id)" onclick="return confirm('Вы - администратор?')">
+                        <i class="bi-trash-fill"></i>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@*<table style="width: 100%;">
+        <thead>
+            <tr>
+                <th style="width:30%">Title</th>
+                <th style="width:60%">Description</th>
+                <th style="min-width:90px">Created</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Img item in Model.Imgs)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>@item.Created.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <a class="btn btn-warning" href="/Img/Edit?imgId=@item.Id">
+                            <i class="bi-pencil"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="/Img/Delete?id=@(item.Id)&albumId=@(Model.Id)" onclick="return confirm('Вы - администратор?')">
+                            <i class="bi-trash-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

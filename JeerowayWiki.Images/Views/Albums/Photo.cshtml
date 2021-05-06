@@ -1,0 +1,81 @@
+﻿@model Atheneum.EntityImg.Img
+<style>
+    .photo-container {
+        display: flex;
+    }
+
+    .photo-content img {
+        max-width: 900px;
+        height: auto;
+    }
+
+    .photo-controller {
+        width: 50px;
+        background-color: lightgray;
+    }
+
+        .photo-controller:hover {
+            background-color: darkgray;
+        }
+
+    .photo-date {
+        color: gray;
+        font-style: italic;
+    }
+
+    .photo-description {
+        width: 100%;
+        background-color: lightgray;
+        min-height: 50px;
+        text-align: center;
+    }
+
+    .btn-admin-controls {
+        right: 0px;
+        float: right;
+        margin-left: 5px;
+    }
+</style>
+
+<h4 style="padding-bottom:10px;">
+    @Model.Title &nbsp;
+
+    @if (User.HasRole(RoleEnum.imgManagement))
+    {
+        <a class="btn btn-warning btn-admin-controls" href="/Img/Edit?imgId=@Model.Id">
+            <i class="bi-pencil"></i>
+        </a>
+        <a class="btn btn-danger btn-admin-controls" href="/Img/Delete?id=@(Model.Id)&albumId=@(Model.AlbumId)" onclick="return confirm('Вы - администратор?')">
+            <i class="bi-trash-fill"></i>
+        </a>
+    }
+
+    <a style="" class="btn btn-primary btn-admin-controls" href="/Albums/Show/@Model.AlbumId">
+        <i class="bi-arrow-90deg-left"></i>
+        В альбом
+    </a>
+
+</h4>
+
+<div class="photo-container">
+    <a href='@(Model.Prev.HasValue ? $"/Albums/Photo/{Model.Prev}" : "")'>
+        <div class="photo-controller">
+            <i class="bi-arrow-bar-left"></i>
+        </div>
+    </a>
+    <div class="photo-content">
+        <img src="/Img/View/@Model.AlbumId/@Model.Id" />
+    </div>
+    <div class="photo-controller">
+        <a href='@(Model.Next.HasValue ? $"/Albums/Photo/{Model.Next}" : "")'>
+            <i class="bi-arrow-bar-right"></i>
+        </a>
+    </div>
+</div>
+<div class="photo-date">
+    Дата создания:
+    @Model.Created.ToString("dd.MM.yyyy")
+</div>
+<div class="photo-description">
+    @Model.Description
+</div>

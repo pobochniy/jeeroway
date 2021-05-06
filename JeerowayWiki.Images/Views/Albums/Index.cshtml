@@ -1,0 +1,32 @@
+﻿@using Atheneum.EntityImg;
+@model IEnumerable<Album>
+
+<a class="btn btn-primary" href="/Albums/Update">Добавить альбом</a>
+
+<table style="width: 100%;">
+    <thead>
+        <tr>
+            <th style="width:30%">Name</th>
+            <th style="width:60%">Description</th>
+            <th style="min-width:90px">Created</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Album item in Model)
+        {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.Created.ToString("dd.MM.yyyy")</td>
+            <td><a class="btn btn-warning" href="/Albums/Update?albumId=@item.Id">Редактировать</a></td>
+            <td>
+                <form action="/Albums/Delete?albumId=@item.Id" method="post">
+                    <input type="submit" class="btn btn-danger" href="#" value="Удалить"/>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
