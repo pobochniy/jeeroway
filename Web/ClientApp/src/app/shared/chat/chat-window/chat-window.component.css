@@ -1,0 +1,87 @@
+.chat-controls-input {
+  width: 100%;
+
+}
+.app {
+  width: 100%;
+  height: 450px;
+  position: relative;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+  border-top: 1px dashed black;
+}
+.chat-fix {
+  height: 450px;
+}
+.chat-container {
+  flex: 1;
+  overflow: auto;
+  padding: 15px 0;
+  box-sizing: border-box;
+}
+.chat-controls {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.chat-controls-textarea {
+  width: 100%;
+  margin-right: 25px;
+}
+.chat-controls-buttons {
+  width: auto;
+}
+.chat-controls-textarea-text-field {
+  /*height: 50px;*/
+  width: 100%;
+  border-radius: 7px;
+  resize: none;
+}
+.chat-item {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: #c8fbfb;
+  border: 1px solid aquamarine;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.chat-resize-panel {
+  position: absolute;
+  height: 10px;
+  cursor: row-resize;
+  top: -5px;
+  left: 0;
+  right: 0;
+  user-select: none;
+}
+.chat-item-from {
+  background-color: #00ffff;
+  display: inline;
+}
+.chat-item-to {
+  background-color: #00ffff;
+}
+.chat-item-privat {
+  background-color: #ff0000;
+}
+
+.chat {
+  left: 270px;
+  right: 20px;
+  transition: all 0.3s;
+}
+
+.chat.wide {
+    left:20px;
+}
+@media (max-width: 768px) {
+  .chat {
+    left: 20px;
+  }
+}

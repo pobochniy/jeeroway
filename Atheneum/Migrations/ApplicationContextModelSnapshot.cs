@@ -19,6 +19,66 @@ namespace Atheneum.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Atheneum.Entity.Identity.ChatPrivate", b =>
+                {
+                    b.Property<long>("Tick")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Msg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Privat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("To")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Tick", "SenderId", "ReceiverId");
+
+                    b.HasIndex("Tick");
+
+                    b.ToTable("ChatPrivate");
+                });
+
+            modelBuilder.Entity("Atheneum.Entity.Identity.ChatRoom", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Msg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Room")
+                        .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Room");
+
+                    b.ToTable("ChatRoom");
+                });
+
             modelBuilder.Entity("Atheneum.Entity.Identity.Profile", b =>
                 {
                     b.Property<Guid>("Id")

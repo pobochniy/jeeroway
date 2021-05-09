@@ -1,0 +1,16 @@
+<nav [class.active]="isExpanded" id="sidebar">
+
+  <div class="sidebar-header">
+    <h3>Jeeroway</h3>
+  </div>
+
+  <ul class="list-unstyled components">
+    <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]='["/"]'>Home</a>
+    </li>
+    <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]="{ exact: false }">
+      <a [routerLink]='["/rolemanagement"]'>Role Management</a>
+    </li>
+  </ul>
+
+</nav>

@@ -3,10 +3,44 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Atheneum.Migrations
 {
-    public partial class Auth : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ChatPrivate",
+                columns: table => new
+                {
+                    Tick = table.Column<long>(type: "bigint", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    To = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Privat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Msg = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatPrivate", x => new { x.Tick, x.SenderId, x.ReceiverId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatRoom",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Room = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    To = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Msg = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatRoom", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -62,6 +96,16 @@ namespace Atheneum.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatPrivate_Tick",
+                table: "ChatPrivate",
+                column: "Tick");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatRoom_Room",
+                table: "ChatRoom",
+                column: "Room");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_Email",
                 table: "Profiles",
                 column: "Email",
@@ -85,6 +129,12 @@ namespace Atheneum.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ChatPrivate");
+
+            migrationBuilder.DropTable(
+                name: "ChatRoom");
+
             migrationBuilder.DropTable(
                 name: "Profiles");
 

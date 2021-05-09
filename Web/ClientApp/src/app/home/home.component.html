@@ -1,0 +1,15 @@
+<h1>АСУ</h1>
+
+<div *ngIf="service.isAuth">
+  <p>Добро пожаловать, {{service.User.userName}} <a [routerLink]='["/"]' (click)="logOut()">[Выход]</a></p>
+  <p>Хорошего дня</p>
+</div>
+
+<div *ngIf="!service.isAuth">
+  <p>Добро пожаловать.</p>
+  <ul>
+    <li><a [routerLink]='["/login"]'>Войдите</a></li>
+    <li>или <a [routerLink]='["/register"]'>Зарегистрируйтесь</a>
+  </ul>
+</div>
+
