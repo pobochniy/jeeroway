@@ -265,3 +265,4 @@ __pycache__/
 **/app/**/*.js
 /JeerowayWiki.Client/Properties/PublishProfiles/FTPProfile.pubxml
 /JeerowayWiki.Images/Properties/PublishProfiles/FTPProfile.pubxml
+/Web/appsettings.Release.json
