@@ -2,7 +2,7 @@
 {
     public class Environments
     {
-        public const string imgBaseHref = "http://img-jeeroway.1gb.ru";
+        public const string imgBaseHref = "https://img.jeeroway.ru";
 
         public static string ImgHref(string path)
         {

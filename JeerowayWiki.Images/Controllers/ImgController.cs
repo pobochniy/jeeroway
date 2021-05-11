@@ -63,7 +63,7 @@ namespace JeerowayWiki.Images.Controllers
         }
 
         [AuthorizeRoles(RoleEnum.imgManagement)]
-        public async Task<IActionResult> Insert(int albumId)
+        public IActionResult Insert(int albumId)
         {
             var model = new AddImg
             {

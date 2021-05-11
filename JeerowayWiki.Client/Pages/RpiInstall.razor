@@ -1,0 +1,88 @@
+﻿@page "/rpiinstall"
+
+<style>
+    img.preview {
+        max-width: 300px;
+    }
+
+    .code {
+        background-color: black;
+        color: whitesmoke;
+    }
+</style>
+
+<h1>Ставим софт на Raspberry Pi</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>Гайд по установке необходимого на Raspberry Pi (малина)</h5>
+        <p>
+            У меня в наличии уже устаревшая rpi серии 3 model b+. Следующая, 4 серия обладает более мощным процессором (в полтора раза) и бОльшим объёмом оперативной памяти.
+            Данный гайд подойдёт для любой модели.<br />
+            Операционная система, с которой мы работаем Raspbian. Хотя на малину можно поставить разнообразные ОС, нам нужна именно Raspbian, так как некоторые используемые пакеты работают только с этой ОС.<br />
+            Итак, чтобы завести малину, нам потребуется компьютер или ноутбук и micro SD флеш карта. Цена флеш карты зависит от её размера и скорости работы.
+            Для работы нам потребуется не более 8 Гб, поэтому при покупке смотрите именно такого размера. Так же не берите самую дешёвую, могут быть непонятные тормоза. В целом, стоят они не дорого и не критично, какой фирмы покупать.<br />
+            Так же необходимо эту флеш карту вначале засунуть в домашний компьютер или ноутбук. Озаботьтесь переходником. Если у вас ноутбук со встроенным кард-ридером типа SD,
+            тогда потребуется переходник micro SD - SD<br />
+
+            <img class="preview" src="@Environments.ImgHref("/Img/View/2/f7b6dab8-c502-431d-f4a4-08d914bdd412")" /><br /><br />
+
+            Если у вас стационарный компьютер без кард ридеров, тогда нужен переходник micro SD - usb. Стоят очень дёшево, какой брать - не принципиально (могут быть под один разъём micro SD, может быть множество разных разъёмов)<br />
+
+            <img class="preview" src="@Environments.ImgHref("/Img/View/2/60ccf13c-2f02-4483-f4a6-08d914bdd412")" /><br /><br />
+        </p>
+        <p>
+            Далее, заходим на официальный сайт raspberrypi.org в раздел <a href="https://www.raspberrypi.org/software/" target="_blank">программного обеспечения</a><br />
+            Скачиваем Raspberry Pi Imager - через эту программу осуществляется заливка Raspbian OS на флеш карту.<br />
+            Выбираем там Raspberry Pi OS (32 bit). Desctop версия означает, что установится так же графическая оболочка, то есть, можно будет пользоваться малиной как обычным компьютером с подключённым монитором.<br />
+            Более продвинутые пользователи могут поставить минимальную версию и пользоваться командной строкой, например, подключившись к малине по сети. <br />
+            Далее выбираем нашу флешку и жмём заливку. Флеш карту после этого можно вставлять в малину
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <img class="preview" src="@Environments.ImgHref("/Img/View/2/ede69dbd-af8d-4929-f49e-08d914bdd412")" />
+                </div>
+                <div class="col-md-6">
+                    <img class="preview" src="@Environments.ImgHref("/Img/View/2/9f75aefa-c257-45cc-f4a8-08d914bdd412")" />
+                </div>
+            </div>
+            <br />
+            При первом запуске будет установка системы - необходимо ввести имя пользователя и пароль, так же желательно подключиться сразу к домашнему вайфаю
+        </p>
+        <br />
+        <h5>Установка необходимого дополнительного программного обеспечения</h5>
+        <p>
+            Практически все команды выполняются на линуксе (Raspbian - это линукс) в терминале. Если у вас десктопная версия, то терминал можно запустить из меню пуск, либо горячими клавишами (погуглите, вроде, ctrl+t)<br />
+            <SurveyPrompt Title="Поставить обновления на операционную систему" Text="sudo apt-get update" />
+            <SurveyPrompt Title="Узнать текущий IP адрес малины внутри домашней сети:" Text="hostname –I" />
+            <SurveyPrompt Title="В первую очередь нам понадобится git, через него будем загружать исходный код проекта Jeeroway:" Text="sudo apt-get install git " />
+            <SurveyPrompt Title="Чтобы запустить код проекта нам понадобится node js. А чтобы его поставить, необходимо вначале задать ссылку:" Text="curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -" />
+            <SurveyPrompt Title="Далее установка node js" Text="sudo apt-get install -y nodejs" />
+            <SurveyPrompt Title="Можем проверить текущую версию ноды:" Text="node –v" />
+            <SurveyPrompt Title="Так же проверить версию пакетного менеджера (ставится вместе с нодой)" Text="npm -v" />
+            <SurveyPrompt Title="Создать папку в текущем каталоге пользователя" Text="mrdir app " />
+            <SurveyPrompt Title="Зайти в эту папку" Text="cd app" />
+            <SurveyPrompt Title="Закачиваем исходный код проекта Jeeroway (ссылка поменяется)" Text="git clone https://jeer.visualstudio.com/testNode/_git/testNode " />
+            <SurveyPrompt Title="Посмотреть все файлы в текущей папке (смотреть в каждой папке)" Text="ls" />
+            <SurveyPrompt Title="Переходим во вложенные папки к исполняемым файлам" Text="cd testNode/" />
+            <SurveyPrompt Title="Ещё ниже" Text="cd nodeTest/" />
+            В папке nodeTest должен располагаться файл package.json и другие исполняемые файлы (видно через команду ls)
+            <SurveyPrompt Title="Обновим npm пакеты" Text="npm i" />
+            <SurveyPrompt Title="Установим пакет raspi" Text="npm i raspi " />
+            <SurveyPrompt Title="Установим пакет raspi-serial" Text="npm i raspi-serial" />
+            <SurveyPrompt Title="Запускаем наше приложение вручную для проверки работоспособности" Text="node app.js" />
+            Сервер node js с приложением Jeeroway запускается на порту 5000. Вбиваем в интернет-проводнике localhost:5000, должен отобразиться наш проект, если всё запущено правильно
+        </p>
+        <p>
+            <h5>Поставим проект Jeeroway в автозагрузку. Чтобы нода запускалась при загрузке raspberry pi</h5>
+            <SurveyPrompt Title="Устанавливаем автозагрузчик pm2" Text="sudo npm install pm2 –g " />
+            <SurveyPrompt Title="Добавляем проект Jeeroway в pm2" Text="pm2 start app.js " />
+            <SurveyPrompt Title="Далее необходимо прописать автозагрузку" Text="pm2 startup ubuntu " />
+            <SurveyPrompt Title="Полная команда от пользователя" Text="sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup ubuntu -u pi --hp /home/p" />
+            <SurveyPrompt Title="Сохранение изменений" Text="pm2 save " />
+            <SurveyPrompt Title="Просмотр запускаемых проектов" Text="pm2 list " />
+            <SurveyPrompt Title="Просмотр состояния запущенных проектов" Text="pm2 monit" />
+            <SurveyPrompt Title="Остановка проекта по порядковому номеру" Text="pm2 stop 0 " />
+            <SurveyPrompt Title="Айпи адрес" Text="Ifconfig" />
+        </p>
+    </div>
+</div>
