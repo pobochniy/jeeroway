@@ -1,11 +1,10 @@
 ﻿using Atheneum.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Atheneum.Entity.Identity
+namespace Atheneum.Entity
 {
     /// <summary>
     /// Таблица с общим чатом

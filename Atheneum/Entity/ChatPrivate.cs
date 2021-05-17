@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Atheneum.Entity.Identity
+namespace Atheneum.Entity
 {
     /// <summary>
     /// Таблица с приватным чатом

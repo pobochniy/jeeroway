@@ -1,13 +1,10 @@
-﻿using Atheneum.Dto.Auth;
-using Atheneum.Dto.Chat;
-using Atheneum.Entity.Identity;
+﻿using Atheneum.Dto.Chat;
+using Atheneum.Entity;
 using Atheneum.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Atheneum.Services

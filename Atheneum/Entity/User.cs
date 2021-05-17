@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Atheneum.Entity.Identity
+namespace Atheneum.Entity
 {
     public class User
     {
@@ -25,6 +25,7 @@ namespace Atheneum.Entity.Identity
 
         public virtual ICollection<UserInRole> UserInRoles { get; set; }
 
+        public virtual ICollection<RoboMetadata> RoboMetadata { get; set; }
 
         public User()
         {

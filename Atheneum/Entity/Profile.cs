@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Atheneum.Entity.Identity
+namespace Atheneum.Entity
 {
     public class Profile
     {

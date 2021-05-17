@@ -1,9 +1,8 @@
 ﻿using Atheneum.Dto.Auth;
-using Atheneum.Entity.Identity;
+using Atheneum.Entity;
 using Atheneum.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;

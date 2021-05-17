@@ -1,10 +1,9 @@
-using Atheneum.Entity.Identity;
+using Atheneum.Entity;
 using Atheneum.Interface;
 using Atheneum.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +36,7 @@ namespace Web
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IRoboService, RoboService>();
 
             services.AddControllersWithViews();
             services.AddSignalR();

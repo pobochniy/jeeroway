@@ -1,20 +1,17 @@
-﻿using Atheneum.Dto.Auth;
-using Atheneum.Entity.Identity;
+﻿using Atheneum.Entity;
 using Atheneum.Enums;
 using Atheneum.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Atheneum.Services
 {
     public class UsersService : IUsersService
     {
-        private ApplicationContext db;
+        private readonly ApplicationContext db;
 
         public UsersService(ApplicationContext context)
         {

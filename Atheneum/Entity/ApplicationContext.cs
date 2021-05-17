@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Atheneum.Entity.Identity
+namespace Atheneum.Entity
 {
     public class ApplicationContext : DbContext
     {
@@ -9,6 +9,7 @@ namespace Atheneum.Entity.Identity
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<UserInRole> UserInRole { get; set; }
+        public DbSet<RoboMetadata> RoboMetadata { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -22,6 +23,7 @@ namespace Atheneum.Entity.Identity
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new ProfileConfiguration());
             builder.ApplyConfiguration(new UserInRoleConfiguration());
+            builder.ApplyConfiguration(new RoboConfiguration());
         }
     }
 }
