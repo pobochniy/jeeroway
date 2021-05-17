@@ -16,6 +16,7 @@ import { UsersApiService } from './shared/api/users-api.service';
 import { NavModule } from './shared/nav/nav.module';
 import { NavTabsService } from './shared/nav/nav-tabs.service';
 import { DatePipe } from '@angular/common';
+import { RoboManagementModule } from './robo-management/robo-management.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { DatePipe } from '@angular/common';
     ChatModule,
     AuthModule,
     RoleManagementModule,
+    RoboManagementModule,
     NgxSelectModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' }
