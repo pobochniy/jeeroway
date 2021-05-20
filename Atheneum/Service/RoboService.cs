@@ -43,7 +43,7 @@ namespace Atheneum.Services
 
         public async Task<RoboDto> Update(RoboDto dto, Guid currentUserId)
         {
-            var res = dto.Id == Guid.Empty
+            var res = !dto.Id.HasValue ||  dto.Id == Guid.Empty
                 ? await Insert(dto, currentUserId)
                 : await Edit(dto, currentUserId);
 

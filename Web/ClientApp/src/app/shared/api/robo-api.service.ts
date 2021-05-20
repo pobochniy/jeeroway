@@ -17,15 +17,15 @@ export class RoboApiService extends BaseApiService {
   }
 
   public async Details(roboId: string) {
-    return this.get<RoboModel>('Details/' + roboId).toPromise();
+    return this.get<RoboModel>('Details?roboId=' + roboId).toPromise();
   }
 
   public async Update(model: FormGroup) {
-    return this.post('Update', model.value).toPromise();
+    return this.post<RoboModel>('Update', model.value).toPromise();
   }
 
   public async Delete(roboId: string) {
-    return this.post('Delete').toPromise();
+    return this.get('Delete?roboId=' + roboId).toPromise();
   }
 
 }

@@ -20,17 +20,41 @@ export class RoboEditComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger;
     const id = this.route.snapshot.paramMap.get('id');
 
-    const robot = await this.service.Details(id);
+    if (id) {
+      const robot = await this.service.Details(id);
 
-    this.cdRef.detectChanges()
+      this.cdRef.detectChanges()
 
-    this.roboForm.setValue({
-      id: robot.id
-      , name: robot.name
-      , description: robot.description
-    });
+      this.roboForm.setValue({
+        id: robot.id
+        , name: robot.name
+        , description: robot.description
+      });
+    }
+  }
+
+  async onSubmit() {
+    for (let item in this.roboForm.controls) {
+      this.roboForm.controls[item].markAsDirty();
+    }
+
+    try {
+      if (this.roboForm.valid) {
+        const goToList = !!this.roboForm.value['id'];
+        const res = await this.service.Update(this.roboForm);
+        debugger;
+        if (goToList) {
+          this.router.navigateByUrl('/robo/list');
+        }
+        else {
+          this.router.navigateByUrl('/robo/details/' + res.id);
+        }
+      }
+    }
+    catch {
+      alert('Возникли непредвиденные ошибки. Попробуйте ввести другие значения или сообщите программисту');
+    }
   }
 }

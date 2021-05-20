@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersApiService } from '../../shared/api/users-api.service';
+import { RoboApiService } from '../../shared/api/robo-api.service';
+import { RoboModel } from '../../shared/models/robo.model';
 
 @Component({
   selector: 'app-robo-list',
@@ -8,12 +9,19 @@ import { UsersApiService } from '../../shared/api/users-api.service';
 })
 export class RoboListComponent implements OnInit {
 
+  public dataSource: RoboModel[];
 
-  constructor(private service: UsersApiService) {
+  constructor(private service: RoboApiService) {
   }
 
   async ngOnInit() {
-    
+    this.dataSource = await this.service.List();
   }
-  ed
+
+  async Delete(id: string) {
+    if (confirm("Вы - Администратор?")) {
+      await this.service.Delete(id);
+      this.dataSource = await this.service.List();
+    }
+  }
 }

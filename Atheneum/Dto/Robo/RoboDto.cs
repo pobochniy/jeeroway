@@ -10,7 +10,7 @@ namespace Atheneum.Dto.Robo
         /// <summary>
         /// Идентификатор робота, выдаётся при регистрации
         /// </summary>
-        public Guid Id { get; set; } = Guid.Empty;
+        public Guid? Id { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Наименование робота

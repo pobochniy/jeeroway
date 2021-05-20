@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { RoboDetailsComponent } from './details/robo-details.component';
 import { RoboManagementRoutingModule } from './robo-management-routing.module';
+import { RoboApiService } from '../shared/api/robo-api.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { RoboManagementRoutingModule } from './robo-management-routing.module';
     , RouterModule
     , SharedModule
     , RoboManagementRoutingModule
-  ]
+    , FormsModule
+  ],
+  providers: [RoboApiService]
 })
 export class RoboManagementModule { }
