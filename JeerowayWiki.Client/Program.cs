@@ -9,6 +9,7 @@ namespace JeerowayWiki.Client
     public class Program
     {
         // иконки https://iconify.design/icon-sets/oi/
+        // иконки бутстрапа (в другом проекте) https://icons.getbootstrap.com/#install
 
         public static async Task Main(string[] args)
         {
