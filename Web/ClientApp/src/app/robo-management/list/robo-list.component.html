@@ -14,6 +14,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +24,11 @@
         <td style="width:80px;">
           <a [routerLink]="['/robo/edit', robot.id]">
             <input type="submit" value="Edit" class="btn btn-primary">
+          </a>
+        </td>
+        <td style="width:80px;">
+          <a [routerLink]="['/robo/control', robot.id]">
+            <input type="submit" value="Рулить" class="btn btn-info">
           </a>
         </td>
         <td style="width:80px;">

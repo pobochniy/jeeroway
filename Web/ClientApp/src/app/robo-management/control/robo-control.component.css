@@ -1,0 +1,9 @@
+.controls {
+  margin: 0 auto;
+  width: 150px;
+}
+
+  .controls .btn.btn-info.active {
+    background-color: lightpink;
+    border-color:lightpink;
+  }

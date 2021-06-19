@@ -8,7 +8,7 @@ import { RoboListComponent } from './list/robo-list.component';
 const routes: Routes = [{
   path: 'robo', children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
-    { path: 'control', component: RoboControlComponent },
+    { path: 'control/:id', component: RoboControlComponent },
     { path: 'edit/:id', component: RoboEditComponent },
     { path: 'details/:id', component: RoboDetailsComponent },
     { path: 'list', component: RoboListComponent }
