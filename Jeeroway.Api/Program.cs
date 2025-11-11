@@ -8,6 +8,7 @@ builder.Services.AddHostedService<UdpListener>();
 builder.Services.AddHostedService<UdpVideoReceiverService>();
 builder.Services.AddSingleton(frameChannel);
 builder.Services.AddSingleton<RecordingSessionManager>();
+builder.Services.AddSingleton<LiveFrameBroadcaster>();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -17,5 +18,7 @@ var app = builder.Build();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.Run();

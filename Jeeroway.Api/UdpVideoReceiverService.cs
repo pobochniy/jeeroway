@@ -8,17 +8,19 @@ public class UdpVideoReceiverService : BackgroundService
     private readonly Channel<byte[]> _frameChannel;
     private readonly UdpClient _udpClient;
     private readonly RecordingSessionManager _recorder;
+    private readonly LiveFrameBroadcaster _broadcaster;
 
     private List<byte> _buffer = new();
 
     private static readonly byte[] JpegStart = { 0xFF, 0xD8 };
     private static readonly byte[] JpegEnd   = { 0xFF, 0xD9 };
 
-    public UdpVideoReceiverService(Channel<byte[]> frameChannel, RecordingSessionManager recorder)
+    public UdpVideoReceiverService(Channel<byte[]> frameChannel, RecordingSessionManager recorder, LiveFrameBroadcaster broadcaster)
     {
         _frameChannel = frameChannel;
         _udpClient = new UdpClient(5000);
         _recorder = recorder;
+        _broadcaster = broadcaster;
     }
 
     protected override async Task ExecuteAsync(CancellationToken ct)
@@ -49,6 +51,9 @@ public class UdpVideoReceiverService : BackgroundService
 
                 // Сохраняем кадр
                 _recorder.SaveFrame(frame);
+
+                // Транслируем в live подписчиков
+                _broadcaster.Broadcast(frame);
 
                 // Удаляем из буфера использованные байты
                 _buffer.RemoveRange(0, startIdx + length);

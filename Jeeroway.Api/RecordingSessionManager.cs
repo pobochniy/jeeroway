@@ -4,8 +4,10 @@ public class RecordingSessionManager
 {
     private string? _currentSessionPath;
     private int _frameCounter = 0;
+    private string? _currentSessionId;
 
     public string? CurrentSessionPath => _currentSessionPath;
+    public string? CurrentSessionId => _currentSessionId;
 
     public string StartSession()
     {
@@ -13,6 +15,7 @@ public class RecordingSessionManager
         var sessionPath = Path.Combine("recordings", sessionId);
         Directory.CreateDirectory(sessionPath);
         _currentSessionPath = sessionPath;
+        _currentSessionId = sessionId;
         _frameCounter = 0;
         return sessionId;
     }
@@ -20,6 +23,7 @@ public class RecordingSessionManager
     public void StopSession()
     {
         _currentSessionPath = null;
+        _currentSessionId = null;
         _frameCounter = 0;
     }
 
@@ -53,3 +57,4 @@ public class RecordingSessionManager
         return Path.Combine("recordings", sessionId, frameFile);
     }
 }
+
