@@ -2,21 +2,38 @@
 const express = require('express');
 const router = express.Router();
 
-const raspi = require('raspi').init;
-const Serial = require('raspi-serial').Serial;
+const serial = require('../services/serial');
 
-router.get('/', function (req, res) {
-    var kk = req.query.p;
-    console.log(kk);
+// GET /led -> send a default command and return serial status
+router.get('/', async (req, res) => {
+    const cmd = 'go();';
+    try {
+        await serial.send(cmd);
+        res.json({ ok: true, sent: cmd.trim(), status: serial.getStatus() });
+    } catch (e) {
+        res.status(500).json({ ok: false, error: String(e), status: serial.getStatus() });
+    }
+});
 
-    var serial = new Serial('/dev/ttyacm0/');
-    serial.open(() => {
-        console.log('koko');
-        serial.write('go();');
-        console.log('LED1.write('+kk+');');
-    });
+// POST /led/send { data: "..." } or ?data=... / ?cmd=...
+router.post('/send', async (req, res) => {
+    const bodyData = typeof req.body?.data === 'string' ? req.body.data : req.body?.cmd;
+    const queryData = typeof req.query?.data === 'string' ? req.query.data : req.query?.cmd;
+    const data = bodyData || queryData;
+    if (!data) return res.status(400).json({ ok: false, error: 'data is required' });
 
-    res.send(kk ? 'led on' : 'led off');
+    const payload = data.endsWith('\n') ? data : data + '\n';
+    try {
+        await serial.send(payload);
+        res.json({ ok: true, sent: payload.trim() });
+    } catch (e) {
+        res.status(500).json({ ok: false, error: String(e) });
+    }
+});
+
+// GET /led/status -> current serial port status
+router.get('/status', (req, res) => {
+    res.json(serial.getStatus());
 });
 
 module.exports = router;
