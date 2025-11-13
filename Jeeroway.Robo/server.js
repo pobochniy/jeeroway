@@ -1,51 +1,42 @@
+'use strict';
+const isDev = 1;
+const overmindHost = isDev ? 'localhost' : '192.168.0.105';
+const overmindPort = isDev ? '54108' : '5000';
+const bodyParser = require('body-parser');
 const express = require('express');
-const {spawn} = require('child_process');
+const led = require('./controllers/led');
+const stream = require('./controllers/stream');
+
+
 const app = express();
 const port = 3000;
 
-let ffmpegProcess = null;
 
-app.post('/start', (req, res) => {
-    if(ffmpegProcess){
-        return res.status(400).send('streaming already started');
-    }
+// app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-    const udpAddress = '192.168.1.33:5000';
-    const args = [
-        '-f', 'v4l2',
-        '-framerate', '15',
-        '-input_format', 'yuyv422',
-        '-video_size', '640x480',
-        '-i', '/dev/video0',
-        '-vcodec', 'mjpeg',
-        '-f', 'mjpeg',
-        'udp://'+udpAddress
-    ];
+app.use('/led', led);
+app.use('/stream', stream)
 
-    console.log('Launch ffmpeg with args:', args.join(' '));
 
-    ffmpegProcess = spawn('ffmpeg', args);
-
-    ffmpegProcess.stderr.on('data', data =>{
-        console.error(`ffmpeg: ${data}`);
-    });
-
-    ffmpegProcess.on('exit', (code)=>{
-        console.log(`ffmpeg exited with code ${code}`);
-        ffmpegProcess = null;
-    });
-    res.send('streaming started');
+app.use(function (req, res, next) {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-app.post('/stop', (req, res)=>{
-    if(!ffmpegProcess){
-        return res.status(400).send('No active stream');
-    }
 
-    ffmpegProcess.kill('SIGINT');
-    ffmpegProcess = null;
-    res.send('Streaming stopped');
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
+
+console.log(process.env.PORT);
+// app.set('port', process.env.PORT || 5000);
 
 app.listen(port, ()=>{
     console.log(`Raspberry pi streaming control on port ${port}`);
