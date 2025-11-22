@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Api", "Jeeroway.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Robo", "Jeeroway.Robo\Jeeroway.Robo.csproj", "{29357229-F351-4797-91DD-3ED0C359FA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Web", "Jeeroway.Web\Jeeroway.Web.csproj", "{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{29357229-F351-4797-91DD-3ED0C359FA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29357229-F351-4797-91DD-3ED0C359FA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29357229-F351-4797-91DD-3ED0C359FA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
