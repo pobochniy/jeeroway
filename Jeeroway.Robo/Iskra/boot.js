@@ -6,7 +6,7 @@ Serial3.on('data', function(data){
   if(buffer.indexOf('50005)')>-1) buffer='';
   
   buffer += data;
-  if(data == ';'){
+  if(data === ';'){
     print(buffer);
     try {eval(buffer);}
     catch(e){}
