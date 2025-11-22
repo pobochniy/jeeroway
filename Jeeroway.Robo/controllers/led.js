@@ -3,10 +3,13 @@ const express = require('express');
 const router = express.Router();
 
 const serial = require('../services/serial');
+const isForward = true; 
 
 // GET /led -> send a default command and return serial status
 router.get('/', async (req, res) => {
-    const cmd = 'go();';
+    this.isForward = !this.isForward;
+    const cmd = `go(${+this.isForward},0,0,0);`;
+    console.log(cmd);
     try {
         await serial.send(cmd);
         res.json({ ok: true, sent: cmd.trim(), status: serial.getStatus() });
@@ -33,6 +36,7 @@ router.post('/send', async (req, res) => {
 
 // GET /led/status -> current serial port status
 router.get('/status', (req, res) => {
+    console.log('status');
     res.json(serial.getStatus());
 });
 

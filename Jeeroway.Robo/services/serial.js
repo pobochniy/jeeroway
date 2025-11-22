@@ -3,9 +3,9 @@
 const { SerialPort } = require('serialport');
 
 class SerialService {
-  constructor({ path = '/dev/ttyACM0', baudRate = 115200, reconnectDelay = 2000 } = {}) {
-    this.path = process.env.SERIAL_PATH || path;
-    this.baudRate = Number(process.env.SERIAL_BAUD) || baudRate;
+  constructor({ path = '/dev/ttyAMA0', baudRate = 9600, reconnectDelay = 2000 } = {}) {
+    this.path = path; // process.env.SERIAL_PATH || path;
+    this.baudRate = +baudRate; //Number(process.env.SERIAL_BAUD) || baudRate;
     this.reconnectDelay = reconnectDelay;
 
     this.port = null;
@@ -61,7 +61,11 @@ class SerialService {
   }
 
   _ensureOpen() {
-    if (this.isOpen() || this.opening) return;
+    if (this.isOpen() || this.opening) {
+      console.log('ensure open: opened');
+      return;
+    }
+      console.log('ensure open: try open port');
     this._openPort();
   }
 
@@ -75,6 +79,7 @@ class SerialService {
     });
 
     port.once('open', () => {
+      console.log('open port');
       this.port = port;
       this.opening = false;
       this.stats.openCount++;
@@ -84,6 +89,7 @@ class SerialService {
     });
 
     port.on('error', (err) => {
+      console.log('erroe on open port');
       this.stats.lastError = err?.message || String(err);
       // If open failed or runtime error, ensure reconnect
       if (!this.isOpen()) {
@@ -93,6 +99,8 @@ class SerialService {
     });
 
     port.on('close', () => {
+
+      console.log('close port');
       this.stats.lastCloseAt = new Date().toISOString();
       this.port = null;
       this.opening = false;
@@ -114,13 +122,16 @@ class SerialService {
   }
 
   _processQueue() {
+      console.log('process queue');
     if (!this.isOpen() || this.inFlight) return;
 
     const item = this.queue.shift();
+      console.log('item', item);
     if (!item) return;
 
     this.inFlight = true;
     this.port.write(item.buffer, (err) => {
+      console.log(item.buffer);
       if (err) {
         this.inFlight = false;
         item.reject(err);
