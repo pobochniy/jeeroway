@@ -1,2 +1,11 @@
-<router-outlet />
-<shared-alerts />
+<div class="wrapper">
+  <shared-nav-menu style="display:flex"></shared-nav-menu>
+  <div id="content">
+    <div class="d-flex">
+      <top-nav></top-nav>
+    </div>
+    <router-outlet></router-outlet>
+    <!--    <app-chat-window class="chat"></app-chat-window>-->
+  </div>
+</div>
+<shared-alerts></shared-alerts>

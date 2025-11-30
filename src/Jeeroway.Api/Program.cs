@@ -1,9 +1,11 @@
 using System.Threading.Channels;
 using Jeeroway.Api;
+using Jeeroway.Api.configs;
 
 var builder = WebApplication.CreateBuilder(args);
 var frameChannel = Channel.CreateUnbounded<byte[]>();
 
+builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddHostedService<UdpListener>();
 builder.Services.AddHostedService<UdpVideoReceiverService>();
 builder.Services.AddSingleton(frameChannel);

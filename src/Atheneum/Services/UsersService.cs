@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Atheneum.Services;
 
-public class UsersService : IUsersService
+public class UsersService
 {
     private readonly ApplicationContext db;
 

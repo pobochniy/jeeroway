@@ -3,8 +3,5 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\Images\" />
-  </ItemGroup>
 
 </Project>

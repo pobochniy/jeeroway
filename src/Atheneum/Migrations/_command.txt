@@ -1,9 +1,0 @@
-add-migration InitApp -project Atheneum -context ApplicationContext
-remove-migration -project Atheneum -context ApplicationContext
-update-database -context ApplicationContext
-
-
-
-add-migration ImagesInit -project Atheneum -context ImagesContext
-remove-migration -project Atheneum -context ImagesContext
-update-database -context ImagesContext

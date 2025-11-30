@@ -2,28 +2,26 @@
 using Atheneum.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
-namespace Web.Controllers
+namespace Jeeroway.Api.controllers;
+
+[Route("api/[controller]")]
+public class ChatController : Controller
 {
-    [Route("api/[controller]")]
-    public class ChatController : Controller
+    private readonly IChatService service;
+
+    public ChatController(IChatService service)
     {
-        private readonly IChatService service;
+        this.service = service;
+    }
 
-        public ChatController(IChatService service)
-        {
-            this.service = service;
-        }
+    [HttpPost]
+    [Route("[action]")]
+    [Authorize]
+    public async Task<IActionResult> GetLastMessages()
+    {
+        var msgs = await service.GetLastMessages(User.GetUserId());
 
-        [HttpPost]
-        [Route("[action]")]
-        [Authorize]
-        public async Task<IActionResult> GetLastMessages()
-        {
-            var msgs = await service.GetLastMessages(User.GetUserId());
-
-            return Ok(msgs);
-        }
+        return Ok(msgs);
     }
 }

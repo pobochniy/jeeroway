@@ -46,9 +46,10 @@ export class AuthApiService extends BaseApiService implements IAuthApiService {
     const body = model?.value ?? model;
     const res = await this.post<TokenModel>('Login', body).toPromise();
     if (res) {
+      debugger
       this.tokenService.Token = res.token;
       this.tokenService.Roles = res.roles ?? [];
-      return { id: res.userId, userName: res.userName };
+      return { id: res.id, userName: res.userName };
     }
     return null;
   }
@@ -60,7 +61,7 @@ export class AuthApiService extends BaseApiService implements IAuthApiService {
     if (res) {
       this.tokenService.Token = res.token;
       this.tokenService.Roles = res.roles ?? [];
-      return { id: res.userId, userName: res.userName };
+      return { id: res.id, userName: res.userName };
     }
     return null;
   }
@@ -75,7 +76,7 @@ export class AuthApiService extends BaseApiService implements IAuthApiService {
 
 export class TokenModel {
   token: string = "";
-  userId: number | null = null;
+  id: number | null = null;
   userName: string | null = null;
   race: number = 0;
   roles: number[] = [];

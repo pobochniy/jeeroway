@@ -1,11 +1,16 @@
 import {Component, Input} from '@angular/core';
 import {Observable, Subject} from "rxjs";
-import {hourlyPayFormModel} from "../../shared/form-models/hourly-pay-form.model";
-import {HourlyPayApiService} from "../../shared/api/hourly-pay-api.service";
-import {AlertsService} from "../../shared/alerts/alerts.service";
+import {hourlyPayFormModel} from "../../../shared/form-models/hourly-pay-form.model";
+import {HourlyPayApiService} from "../../../shared/api/hourly-pay-api.service";
+import {AlertsService} from "../../../shared/alerts/alerts.service";
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-hourly-pay-popup',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './hourly-pay-popup.component.html',
   styleUrl: './hourly-pay-popup.component.css'
 })
@@ -20,7 +25,7 @@ export class HourlyPayPopupComponent {
   @Input('userId') userId?: string;
 
   constructor(public alerts: AlertsService,
-    public api: HourlyPayApiService) {
+              public api: HourlyPayApiService) {
   }
 
 
@@ -55,8 +60,9 @@ export class HourlyPayPopupComponent {
     const hourlyPay = this.hourlyPayForm.get('cash')?.value || 0;
     this.monthlyPay = hourlyPay * this.hoursInMonth;
   }
+
   public calcHourPay(e: any) {
-    if(!+e.target.value) return;
+    if (!+e.target.value) return;
     const hourPay = +Number(+e.target.value / this.hoursInMonth).toFixed(2);
     this.hourlyPayForm.patchValue({
       cash: hourPay

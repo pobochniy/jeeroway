@@ -1,22 +1,17 @@
-﻿using Atheneum.Dto.Auth;
-using Atheneum.Interface;
+﻿using System.Security.Claims;
+using Api.Middleware;
+using Atheneum.Dto.Auth;
+using Atheneum.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-// using Api.Middleware;
-// using Api.SignalR;
-using Atheneum.Dto.Chat;
-using Atheneum.Enums;
-using Atheneum.Services;
-using Microsoft.AspNetCore.SignalR;
 
-namespace Api.Controllers;
+namespace Jeeroway.Api.controllers;
 
 [Route("api/[controller]/[action]")]
 [AllowAnonymous]
-// [ValidateRequest]
+[ValidateRequest]
 public class AuthController : ControllerBase
 {
     // private readonly IHubContext<ChatHub, IChatHub> _hub;

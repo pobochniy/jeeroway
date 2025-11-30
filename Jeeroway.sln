@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeerowayWiki.Images", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atheneum", "src\Atheneum\Atheneum.csproj", "{247DC202-CBA9-4875-893B-AE7A13856B06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "src\Web\Web.csproj", "{DCEDB777-7017-4EBC-ADA2-72C404E081D3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Api", "src\Jeeroway.Api\Jeeroway.Api.csproj", "{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Robo", "src\Jeeroway.Robo\Jeeroway.Robo.csproj", "{29357229-F351-4797-91DD-3ED0C359FA58}"
@@ -35,10 +33,6 @@ Global
 		{247DC202-CBA9-4875-893B-AE7A13856B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{247DC202-CBA9-4875-893B-AE7A13856B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{247DC202-CBA9-4875-893B-AE7A13856B06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCEDB777-7017-4EBC-ADA2-72C404E081D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCEDB777-7017-4EBC-ADA2-72C404E081D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCEDB777-7017-4EBC-ADA2-72C404E081D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCEDB777-7017-4EBC-ADA2-72C404E081D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}.Release|Any CPU.ActiveCfg = Release|Any CPU

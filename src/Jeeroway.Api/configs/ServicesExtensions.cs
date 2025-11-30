@@ -84,7 +84,7 @@ public static class ServicesExtensions
     private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
     {
         var connString = config.GetConnectionString("AppConnection");
-        var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
+        var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
         services.AddDbContext<ApplicationContext>(opt => opt.UseMySql(
             connString!,
             serverVersion,

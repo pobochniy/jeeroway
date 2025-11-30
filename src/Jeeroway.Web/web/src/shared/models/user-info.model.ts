@@ -8,5 +8,6 @@ export class UserInfoModel {
 
   constructor(obj: Partial<UserInfoModel> = {}) {
     Object.assign(this, obj);
+    debugger
   }
 }
