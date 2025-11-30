@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeerowayWiki.Client", "JeerowayWiki.Client\JeerowayWiki.Client.csproj", "{4D467511-06B3-454C-9AC0-CF7795E04694}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeerowayWiki.Client", "src\JeerowayWiki.Client\JeerowayWiki.Client.csproj", "{4D467511-06B3-454C-9AC0-CF7795E04694}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeerowayWiki.Images", "JeerowayWiki.Images\JeerowayWiki.Images.csproj", "{E09D5D5B-DBFB-4F20-AE42-191C0794AA44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeerowayWiki.Images", "src\JeerowayWiki.Images\JeerowayWiki.Images.csproj", "{E09D5D5B-DBFB-4F20-AE42-191C0794AA44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atheneum", "Atheneum\Atheneum.csproj", "{247DC202-CBA9-4875-893B-AE7A13856B06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atheneum", "src\Atheneum\Atheneum.csproj", "{247DC202-CBA9-4875-893B-AE7A13856B06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{DCEDB777-7017-4EBC-ADA2-72C404E081D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "src\Web\Web.csproj", "{DCEDB777-7017-4EBC-ADA2-72C404E081D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Api", "Jeeroway.Api\Jeeroway.Api.csproj", "{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Api", "src\Jeeroway.Api\Jeeroway.Api.csproj", "{7E9EDD7E-B256-4C6E-AAB6-F37A513B01B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Robo", "Jeeroway.Robo\Jeeroway.Robo.csproj", "{29357229-F351-4797-91DD-3ED0C359FA58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Robo", "src\Jeeroway.Robo\Jeeroway.Robo.csproj", "{29357229-F351-4797-91DD-3ED0C359FA58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Web", "Jeeroway.Web\Jeeroway.Web.csproj", "{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeeroway.Web", "src\Jeeroway.Web\Jeeroway.Web.csproj", "{7B830227-42AF-43CD-BEC1-C34D8EAF31CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
