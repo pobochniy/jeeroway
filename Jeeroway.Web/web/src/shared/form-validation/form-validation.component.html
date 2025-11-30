@@ -1,0 +1,22 @@
+@if (model.statusChanges | async) { <ng-container></ng-container> }
+@if (model.valueChanges | async) { <ng-container></ng-container> }
+
+@if (model && model.errors && (model.touched || model.dirty)) {
+  <div class="error-msg">
+    @if (model.errors['required']) {
+      <div class="text-danger">Поле "{{fieldName}}" обязательно</div>
+    }
+
+    @if (model.errors['minlength']) {
+      <div class="text-danger">
+        Минимальная длина {{ model.errors['minlength'].requiredLength }}. Сейчас: {{ model.errors['minlength'].actualLength }}
+      </div>
+    }
+
+    @if (model.errors['maxlength']) {
+      <div class="text-danger">
+        Максимальная длина {{ model.errors['maxlength'].requiredLength }}
+      </div>
+    }
+  </div>
+}

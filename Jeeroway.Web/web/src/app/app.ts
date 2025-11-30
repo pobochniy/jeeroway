@@ -1,9 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AlertsComponent } from '../shared/alerts/alerts.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, AlertsComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

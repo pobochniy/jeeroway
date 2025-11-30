@@ -1,0 +1,22 @@
+#alerts-container {
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  padding: 0 2.5%;
+  z-index: 1100; /* above navbar (1030) and modal (1055/backdrop 1050) */
+  pointer-events: none; /* container doesn't block clicks */
+}
+
+.alert-content {
+  display: inline;
+  white-space: pre-line; /* preserve newlines from alert content */
+}
+.btn-close {
+  float: right;
+}
+
+/* Re-enable interactions on actual alerts */
+.alert {
+  pointer-events: auto;
+}

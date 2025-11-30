@@ -1,0 +1,181 @@
+.btn.btn-primary {
+  /* Сброс стандартных стилей Bootstrap */
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: #E0FFFF; /* Светло-голубой, почти белый текст */
+  position: relative;
+  overflow: hidden;
+  border: none;
+  z-index: 1;
+
+  /* Базовая типографика */
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 1rem; /* Уменьшаем размер шрифта */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* Небольшой межбуквенный интервал */
+  padding: 10px 20px; /* Уменьшаем отступы */
+
+  /* Форма кнопки: ромб (скошенные углы) */
+  clip-path: polygon(
+    10px 0,          /* Верхний левый скос */
+    calc(100% - 10px) 0, /* Верхний правый скос */
+    100% 10px,       /* Правый верхний скос */
+    100% calc(100% - 10px), /* Правый нижний скос */
+    calc(100% - 10px) 100%, /* Нижний правый скос */
+    10px 100%,       /* Нижний левый скос */
+    0 calc(100% - 10px), /* Левый нижний скос */
+    0 10px           /* Левый верхний скос */
+  );
+  border-radius: 0; /* Убираем все радиусы для четкости */
+  transition: all 0.2s ease-out; /* Более быстрая и четкая анимация */
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.3); /* Общее нежное свечение */
+}
+
+.btn.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 1;
+
+  /* Базовый фон: глубокий синий градиент */
+  background: linear-gradient(135deg, #0D264F 0%, #1A3E6D 100%);
+  /* Тонкая рамка */
+  border: 1px solid rgba(0, 191, 255, 0.5);
+  transition: all 0.2s ease-out;
+
+  /* Объемный эффект: тень справа и снизу */
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), /* Тень справа и снизу */
+  inset 0 0 8px rgba(0, 191, 255, 0.1); /* Легкая внутренняя подсветка */
+}
+
+/* Эффекты при наведении */
+.btn.btn-primary:hover {
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.6); /* Увеличиваем свечение */
+}
+
+.btn.btn-primary:hover::before {
+  /* Градиент при наведении: синий с лёгким фиолетовым акцентом */
+  background: linear-gradient(135deg, #1A3E6D 0%, #00C6FF 70%, #8e2de2 100%);
+  border-color: rgba(0, 191, 255, 0.8); /* Рамка становится ярче */
+  box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.7), /* Тень становится заметнее */
+  inset 0 0 12px rgba(0, 191, 255, 0.2); /* Усиливаем внутреннюю подсветку */
+  transform: translateY(-2px); /* Легкий эффект "подъема" */
+}
+
+/* Эффекты при нажатии */
+.btn.btn-primary:active {
+  box-shadow: 0 0 5px rgba(0, 191, 255, 0.2); /* Уменьшаем свечение */
+  transform: translateY(1px); /* Эффект "погружения" */
+}
+
+.btn.btn-primary:active::before {
+  /* Градиент при нажатии: более темный синий с намёком на фиолетовый */
+  background: linear-gradient(135deg, #081527 0%, #12223a 80%, #6A0DAD 100%);
+  border-color: rgba(0, 191, 255, 0.3); /* Тусклая рамка */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), /* Тень уменьшается */
+  inset 0 0 5px rgba(0, 191, 255, 0.1); /* Легкая внутренняя подсветка */
+  transform: translateY(0); /* Сбрасываем подъем */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.btn.btn-info {
+  /* Базовый стиль, как у primary кнопки, но с серыми цветами */
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: #A0A0A0; /* Серый текст */
+  position: relative;
+  overflow: hidden;
+  border: none;
+  z-index: 1;
+
+  /* Типографика и форма остаются такими же, как у primary */
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 calc(100% - 10px),
+    0 10px
+  );
+  border-radius: 0;
+  transition: all 0.2s ease-out;
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.2); /* Приглушенное серое свечение */
+}
+
+.btn.btn-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 1;
+
+  /* Базовый фон: серый градиент */
+  background: linear-gradient(135deg, #2E2E2E 0%, #4D4D4D 100%);
+  /* Тонкая серая рамка */
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  transition: all 0.2s ease-out;
+
+  /* Объемный эффект */
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3), /* Более приглушенная тень */
+  inset 0 0 5px rgba(128, 128, 128, 0.1); /* Сдержанная внутренняя подсветка */
+}
+
+/* Эффекты при наведении */
+.btn.btn-info:hover {
+  color: #E0E0E0; /* Текст становится светлее */
+  box-shadow: 0 0 10px rgba(128, 128, 128, 0.4); /* Усиливаем свечение */
+}
+
+.btn.btn-info:hover::before {
+  /* Градиент при наведении: переход в более светлый серый */
+  background: linear-gradient(135deg, #4D4D4D 0%, #6E6E6E 100%);
+  border-color: rgba(128, 128, 128, 0.5); /* Рамка становится ярче */
+  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.5), /* Тень становится заметнее */
+  inset 0 0 8px rgba(128, 128, 128, 0.2); /* Усиливаем внутреннюю подсветку */
+  transform: translateY(-1px); /* Легкий эффект "подъема" */
+}
+
+/* Эффекты при нажатии */
+.btn.btn-info:active {
+  box-shadow: 0 0 3px rgba(128, 128, 128, 0.1); /* Уменьшаем свечение */
+  transform: translateY(1px);
+}
+
+.btn.btn-info:active::before {
+  /* Градиент при нажатии: более темный серый */
+  background: linear-gradient(135deg, #1C1C1C 0%, #2E2E2E 100%);
+  border-color: rgba(128, 128, 128, 0.2); /* Тусклая рамка */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2), /* Тень уменьшается */
+  inset 0 0 5px rgba(128, 128, 128, 0.1);
+  transform: translateY(0);
+}

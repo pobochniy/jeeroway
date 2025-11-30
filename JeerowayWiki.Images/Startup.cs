@@ -1,16 +1,7 @@
-using Atheneum.Entity;
-using Atheneum.EntityImg;
 using Atheneum.Interface;
 using Atheneum.Services;
 using JeerowayWiki.Images.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace JeerowayWiki.Images
 {
@@ -28,14 +19,14 @@ namespace JeerowayWiki.Images
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
 
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
-
-            services.AddDbContext<ImagesContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ImgConnection")));
+            // services.AddDbContext<ApplicationContext>(options =>
+            //     options.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
+            //
+            // services.AddDbContext<ImagesContext>(options =>
+            //     options.UseSqlServer(Configuration.GetConnectionString("ImgConnection")));
 
             services.AddTransient<RolesValidation>();
-            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<AuthService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IImgService, ImgService>();
@@ -43,10 +34,10 @@ namespace JeerowayWiki.Images
             //services.AddControllers();
             //services.AddMvc().AddRazorOptions(options => options.AllowRecompilingViewsOnFileChange = true); ;
             services.AddControllersWithViews();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "JeerowayWiki.Images", Version = "v1" });
-            });
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "JeerowayWiki.Images", Version = "v1" });
+            // });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,8 +49,8 @@ namespace JeerowayWiki.Images
 
             app.UseRouting();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JeerowayWiki.Images v1"));
+            // app.UseSwagger();
+            // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JeerowayWiki.Images v1"));
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();
