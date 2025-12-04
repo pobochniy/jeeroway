@@ -27,7 +27,7 @@ namespace JeerowayWiki.Images
 
             services.AddTransient<RolesValidation>();
             services.AddTransient<AuthService>();
-            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<UsersService>();
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IImgService, ImgService>();
 

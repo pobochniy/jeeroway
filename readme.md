@@ -1,0 +1,36 @@
+---
+version: '3.8'
+services:
+  jeerowaydb:
+    image: mysql:8.0.31
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: jeerowaydb
+      MYSQL_USER: app
+      MYSQL_PASSWORD: 12345
+    ports:
+      - 3333:3306
+        
+  imagesdb:
+    image: mysql:8.0.31
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: imagesdb
+      MYSQL_USER: app
+      MYSQL_PASSWORD: 12345
+    ports:
+      - 3334:3306
+        
+#  qdrant:
+#    image: qdrant/qdrant:v1.14.0
+#    container_name: qdrant
+#    ports:
+#      - "6335:6333"   # REST API
+#      - "6336:6334"   # gRPC API
+#    volumes:
+#      - qdrant_data:/qdrant/storage
+
+#volumes:
+#  qdrant_data:

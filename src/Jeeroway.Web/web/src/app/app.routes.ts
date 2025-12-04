@@ -18,5 +18,9 @@ export const routes: Routes = [
     path: 'profiles',
     loadChildren: () => import('./profiles/profiles.module').then(m => m.routes)
   },
+  {
+    path: 'robo',
+    loadChildren: () => import('./robo-management/robo-management-routing.module').then(m => m.routes)
+  },
   { path: '**', redirectTo: '' }
 ];
