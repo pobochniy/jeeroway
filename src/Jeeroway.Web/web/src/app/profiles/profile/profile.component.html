@@ -1,0 +1,35 @@
+<app-hourly-pay-popup [userId]="currentUser()?.id"></app-hourly-pay-popup>
+<h4>Профиль</h4>
+
+<div class="form-group row">
+  <div class="col-md-6">
+    @let user = currentUser();
+    @if (user) {
+      <div>
+        <p>{{user.userName}} {{user.cash}}</p>
+        <p>{{user.email}}</p>
+        <p>{{user.phone}}</p>
+        <p>{{user.comment}}</p>
+      </div>
+    } @else {
+      <div class="text-muted">Загрузка профиля...</div>
+    }
+    <hr />
+    <!--    @if (hourlyPays !== undefined && userService.hasRole(roles.hourlyPayRead)) {
+            <a @if (userService.hasRole(roles.hourlyPayCrud)) (click)="createHourlyPay()" class="link link-info">Добавить ставку сотрудника</a>
+            @for (hourlyPay of hourlyPays; track hourlyPay.startedDate) {
+              <div>
+                <p>с {{dateAsString(hourlyPay.startedDate)}} ставка {{hourlyPay.cash}} монет (<shared-user-name [userId]="hourlyPay.userIdCreated"></shared-user-name>)</p>
+              </div>
+            }
+          } -->
+  </div>
+  <div class="col-md-6">
+    @for (profile of profiles(); track profile.id) {
+      <p>
+        {{profile.userName}} <a [routerLink]="['/profiles/user', profile.id]">[i]</a>
+      </p>
+    }
+  </div>
+</div>
+

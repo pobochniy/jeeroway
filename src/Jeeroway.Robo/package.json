@@ -1,0 +1,19 @@
+{
+  "name": "jeeroway.robo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@microsoft/signalr": "^10.0.0",
+    "express": "^5.1.0",
+    "serialport": "^13.0.0"
+  }
+}

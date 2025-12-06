@@ -1,0 +1,13 @@
+﻿средства - диспетчер пакетов NuGet - консоль
+
+(из src)
+dotnet ef migrations add Init --startup-project Jeeroway.Api --project Atheneum --context ApplicationContext 
+
+(из src)
+dotnet ef database update --startup-project Jeeroway.Api --project Atheneum --context ApplicationContext
+
+remove-migration
+
+update-database NAME_OF_MIGRATION
+
+script-migration

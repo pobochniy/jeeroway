@@ -1,0 +1,25 @@
+<h4>Robo Control</h4>
+
+<!--<a class="btn btn-info" (click)="reconnect()">{{}}</a>-->
+
+<div class="controls">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <div class="btn btn-info" [class.active]="buttonState().w" (mouseup)="pushTheButton('w', false)" (mousedown)="pushTheButton('w', true)">Go</div>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <a class="btn btn-info" [class.active]="buttonState().a" (mouseup)="pushTheButton('a', false)" (mousedown)="pushTheButton('a', true)"><</a>
+    </div>
+    <div class="col-md-4">
+      <a class="btn btn-info" [class.active]="buttonState().s" (mouseup)="pushTheButton('s', false)" (mousedown)="pushTheButton('s', true)">|</a>
+    </div>
+    <div class="col-md-4">
+      <a class="btn btn-info" [class.active]="buttonState().d" (mouseup)="pushTheButton('d', false)" (mousedown)="pushTheButton('d', true)">></a>
+    </div>
+  </div>
+</div>

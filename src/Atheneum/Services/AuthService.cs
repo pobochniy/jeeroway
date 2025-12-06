@@ -1,0 +1,112 @@
+﻿using Atheneum.Dto.Auth;
+using Atheneum.Entity;
+using Atheneum.Interface;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Atheneum.Services;
+
+public class AuthService
+{
+    private ApplicationContext db;
+
+    public AuthService(ApplicationContext context)
+    {
+        db = context;
+    }
+
+    public async Task Register(RegisterDto dto, CancellationToken ct)
+    {
+        if (await db.Profiles.AnyAsync(x => x.UserName == dto.UserName, cancellationToken: ct)
+            || !string.IsNullOrWhiteSpace(dto.Email) && await db.Profiles.AnyAsync(x => x.Email == dto.Email, cancellationToken: ct)
+            || !string.IsNullOrWhiteSpace(dto.Phone) && await db.Profiles.AnyAsync(x => x.PhoneNumber == dto.Phone, cancellationToken: ct))
+        {
+            throw new ArgumentException();
+        }
+
+        var salt = Guid.NewGuid();
+
+        var profile = new Profile
+        {
+            Id = Guid.NewGuid(),
+            UserName = dto.UserName,
+            Email = dto.Email,
+            PhoneNumber = dto.Phone,
+            User = new User
+            {
+                SecurityStamp = salt.ToString(),
+                PasswordHash = GetHashString($"{salt}#{dto.Password}")
+            }
+        };
+
+        await db.Profiles.AddAsync(profile, ct);
+        await db.SaveChangesAsync(ct);
+    }
+
+    public async Task<UserDto> LogIn(LoginDto dto, CancellationToken ct)
+    {
+        Profile profile = null;
+
+        if (dto.IsPhone)
+        {
+            profile = await db.Profiles.Include(x => x.User).SingleAsync(x => x.PhoneNumber == dto.Login, cancellationToken: ct);
+        }
+        else if (dto.IsEmail)
+        {
+            profile = await db.Profiles.Include(x => x.User).SingleAsync(x => x.Email == dto.Login, cancellationToken: ct);
+        }
+        else
+        {
+            profile = await db.Profiles.Include(x => x.User).SingleOrDefaultAsync(x => x.UserName == dto.Login, cancellationToken: ct);
+        }
+
+        if (profile == null ||
+            profile.User.PasswordHash != GetHashString($"{profile.User.SecurityStamp}#{dto.Password}"))
+            throw new UnauthorizedAccessException();
+
+        var res = new UserDto
+        {
+            Id = profile.Id,
+            UserName = profile.UserName,
+            Email = profile.Email,
+            Phone = profile.PhoneNumber
+        };
+
+        res.Roles = await db.UserInRole
+            .Where(x => x.UserId == profile.Id)
+            .Select(x => x.RoleId)
+            .ToArrayAsync(cancellationToken: ct);
+
+        return res;
+    }
+
+    private string GetHashString(string inputString)
+    {
+        var sb = new StringBuilder();
+        foreach (byte b in GetHash(inputString))
+            sb.Append(b.ToString("X2"));
+
+        return sb.ToString();
+    }
+
+    private byte[] GetHash(string inputString)
+    {
+        HashAlgorithm algorithm = MD5.Create(); //or use SHA256.Create();
+        return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+    }
+
+    //public async Task<IEnumerable<string>> GetRoles(Guid userId)
+    //{
+    //    var roles = await db.Roles
+    //        .Where(x => x.UserInRoles.Any(r => r.UserId == userId))
+    //        .Select(x => x.RoleName)
+    //        .ToArrayAsync();
+
+    //    return roles;
+    //}
+}
