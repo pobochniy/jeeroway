@@ -13,9 +13,9 @@ import { RoboControlModel } from '../../../shared/models/robo-control.model';
 })
 export class RoboControlComponent implements OnInit, OnDestroy {
   public connection!: HubConnection;
-  public timerId: any;
   public buttonState = signal<RoboControlModel>(new RoboControlModel());
   public roboId: string = '';
+  public isConnected = signal<boolean>(false);
 
   constructor(private route: ActivatedRoute) {
     this.keyButtons = this.keyButtons.bind(this);
@@ -27,9 +27,18 @@ export class RoboControlComponent implements OnInit, OnDestroy {
     this.roboId = this.route.snapshot.paramMap.get('id') ?? '';
 
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(`/robocontrol?roboId=${this.roboId}`)
+      .withUrl(`/hub/robocontrol?roboId=${this.roboId}`)
       .build();
-    this.connection.start();
+
+    try {
+      await this.connection.start();
+      this.isConnected.set(true);
+      console.log('SignalR Connected');
+    } catch (err) {
+      console.error('SignalR Connection Error:', err);
+      this.isConnected.set(false);
+    }
+
     document.addEventListener('keyup', this.keyButtons);
     document.addEventListener('keydown', this.keyButtons);
   }
@@ -37,40 +46,75 @@ export class RoboControlComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     document.removeEventListener('keyup', this.keyButtons);
     document.removeEventListener('keydown', this.keyButtons);
-    clearTimeout(this.timerId);
     if (this.connection) {
       this.connection.stop();
     }
   }
 
   keyButtons(e: KeyboardEvent) {
-    if (e.type == 'keyup') this.pushTheButton('');
-    else if (e.type == 'keydown') this.pushTheButton(e.key);
+    const key = e.key.toLowerCase();
+    
+    // Маппинг русской раскладки на английскую
+    const keyMap: Record<string, string> = {
+      'ц': 'w', // W
+      'ы': 's', // S
+      'ф': 'a', // A
+      'в': 'd'  // D
+    };
+    
+    const mappedKey = keyMap[key] || key;
+    
+    if (['w', 'a', 's', 'd'].includes(mappedKey)) {
+      if (e.type === 'keyup') {
+        this.pushTheButton(mappedKey, false);
+      } else if (e.type === 'keydown') {
+        this.pushTheButton(mappedKey, true);
+      }
+    }
   }
 
-  public pushTheButton(code: string) {
-    this.buttonState.update(_ => {
+  public pushTheButton(code: string, isPressed: boolean = true) {
+    this.buttonState.update(current => {
       const s = new RoboControlModel();
+      // Копируем текущее состояние
+      s.w = current.w;
+      s.s = current.s;
+      s.a = current.a;
+      s.d = current.d;
+
+      // Обновляем только конкретную кнопку
       switch (code) {
-        case 'w': s.w = true; break;
-        case 's': s.s = true; break;
-        case 'a': s.a = true; break;
-        case 'd': s.d = true; break;
-        default: /* all false */ break;
+        case 'w': s.w = isPressed; break;
+        case 's': s.s = isPressed; break;
+        case 'a': s.a = isPressed; break;
+        case 'd': s.d = isPressed; break;
       }
+
       s.roboId = this.roboId;
       s.timeJs = Date.now();
       return s;
     });
-    clearTimeout(this.timerId);
+
     this.sendButtonState();
   }
 
   sendButtonState() {
-    this.connection.invoke("PushControl", this.buttonState());
-    this.timerId = setTimeout(() => {
-      this.buttonState.set(new RoboControlModel());
-      this.sendButtonState()
-    }, 20000);
+    if (!this.isConnected()) {
+      console.warn('SignalR not connected, skipping send');
+      return;
+    }
+
+    const state = this.buttonState();
+
+    // Проверяем, что roboId установлен
+    if (!state.roboId) {
+      console.warn('RoboId is empty, skipping send');
+      return;
+    }
+
+    this.connection.invoke("PushControl", state)
+      .catch(err => console.error('Error invoking PushControl:', err));
+
+    // Отправка происходит только при изменении состояния кнопок
   }
 }

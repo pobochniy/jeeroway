@@ -22,10 +22,11 @@ app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<RoboHub>("/robocontrol");
+app.MapHub<RoboHub>("hub/robocontrol");
+app.MapHub<ChatHub>("hub/chat");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.Run();
+await app.RunAsync();

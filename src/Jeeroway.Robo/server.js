@@ -5,6 +5,7 @@ const overmindPort = isDev ? '54108' : '5000';
 const express = require('express');
 const led = require('./controllers/led');
 const stream = require('./controllers/stream');
+const hub = require('./controllers/hub');
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/led', led);
 app.use('/stream', stream)
+app.use('/hub', hub)
 
 
 app.use(function (req, res, next) {

@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@microsoft/signalr": "^10.0.0",
     "express": "^5.1.0",
     "serialport": "^13.0.0"
   }
