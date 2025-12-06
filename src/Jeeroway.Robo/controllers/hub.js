@@ -6,10 +6,10 @@ const SignalRClient = require('../services/signalr-client');
 const serial = require('../services/serial');
 const { spawn } = require('child_process');
 
-const isDev = 1;
-const overmindHost = isDev ? 'localhost' : '192.168.0.105';
-const overmindPort = isDev ? '54108' : '5000';
-const hubUrl = `http://${overmindHost}:${overmindPort}/robohub`;
+const isDev = 0;
+const overmindHost = isDev ? 'localhost' : '192.168.1.33';
+const overmindPort = '5000';
+const hubUrl = `http://${overmindHost}:${overmindPort}/hub/robocontrol`;
 
 // TODO: Получать roboId из конфигурации или переменных окружения
 const roboId = process.env.ROBO_ID || '00000000-0000-0000-0000-000000000001';
@@ -100,6 +100,11 @@ signalRClient.on('StopVideoStream', async () => {
     }
 });
 
+// Запускаем подключение к SignalR хабу при загрузке модуля
+signalRClient.start().catch(err => {
+    console.error('[Hub] Failed to start SignalR client:', err.message);
+});
+
 // REST endpoints для тестирования и мониторинга
 router.get('/status', (req, res) => {
     res.json({
@@ -126,6 +131,16 @@ router.post('/test-invoke', async (req, res) => {
         
         await signalRClient.invoke(method, data);
         res.json({ ok: true, method, data });
+    } catch (error) {
+        res.status(500).json({ ok: false, error: error.message });
+    }
+});
+
+router.get('/reconnect', async (req, res) => {
+    try {
+        console.log('[Hub] Manual reconnect requested');
+        await signalRClient.start();
+        res.json({ ok: true, state: signalRClient.getState() });
     } catch (error) {
         res.status(500).json({ ok: false, error: error.message });
     }
