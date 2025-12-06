@@ -1,31 +1,25 @@
-﻿using Atheneum.Dto.Robo;
+﻿using Api.Middleware;
+using Atheneum.Dto.Robo;
 using Atheneum.Extentions.Auth;
-using Atheneum.Interface;
+using Atheneum.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jeeroway.Api.controllers;
 
-[Route("api/[controller]")]
-public class RoboController : Controller
+[Route("api/[controller]/[action]")]
+[Authorize]
+[ValidateRequest]
+public class RoboController(RoboService service) : Controller
 {
-    private IRoboService service;
-
-    public RoboController(IRoboService service)
-    {
-        this.service = service;
-    }
-
-    [HttpGet("[action]")]
-    [Authorize]
+    [HttpGet]
     public async Task<IEnumerable<RoboDto>> List()
     {
         var res = await service.List(User.GetUserId());
         return res;
     }
 
-    [HttpGet("[action]")]
-    [Authorize]
+    [HttpGet]
     public async Task<RoboDto> Details([FromQuery] Guid roboId)
     {
         var res = await service.Details(roboId);
@@ -33,16 +27,14 @@ public class RoboController : Controller
         return res;
     }
 
-    [HttpPost("[action]")]
-    [Authorize]
+    [HttpPost]
     public async Task<RoboDto> Update([FromBody] RoboDto dto)
     {
         var res = await service.Update(dto, User.GetUserId());
         return res;
     }
 
-    [HttpGet("[action]")]
-    [Authorize]
+    [HttpGet]
     public async Task<IEnumerable<RoboDto>> Delete([FromQuery] Guid roboId)
     {
         var res = await service.Delete(roboId, User.GetUserId());

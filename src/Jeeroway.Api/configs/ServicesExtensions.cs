@@ -16,6 +16,7 @@ public static class ServicesExtensions
             .ConfigureCors()
             .AddAuthentication()
             .AddControllersWithSwagger()
+            .AddSignalRHubs()
             // .RegisterMiddlewares()
             .AddDbContext(config)
             // .AddLocalQueue(config)
@@ -80,6 +81,16 @@ public static class ServicesExtensions
 
         return services;
     }
+
+    private static IServiceCollection AddSignalRHubs(this IServiceCollection services)
+    {
+        services.AddSignalR()
+            .AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+            });
+        return services;
+    }
     
     private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
     {
@@ -120,6 +131,7 @@ public static class ServicesExtensions
         services.AddTransient<AuthService>();
         services.AddTransient<IChatService, ChatService>();
         services.AddTransient<UsersService>();
+        services.AddTransient<RoboService>();
 
         return services;
     }

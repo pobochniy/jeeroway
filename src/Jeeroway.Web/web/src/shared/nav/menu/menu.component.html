@@ -15,7 +15,7 @@
     }
     @if (userService.isAuth) {
       <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]="{ exact: false }">
-        <a [routerLink]='["/robots"]'><i class="fas fa-user-tag"></i>Robots</a>
+        <a [routerLink]='["/robo"]'><i class="fas fa-user-tag"></i>Robots</a>
       </li>
     }
     @if (userService.hasRole(roles.management)) {

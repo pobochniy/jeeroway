@@ -9,18 +9,11 @@ using System.Threading.Tasks;
 
 namespace Atheneum.Services;
 
-public class RoboService : IRoboService
+public class RoboService(ApplicationContext context)
 {
-    private readonly ApplicationContext db;
-
-    public RoboService(ApplicationContext context)
-    {
-        db = context;
-    }
-
     public async Task<IEnumerable<RoboDto>> List(Guid userId)
     {
-        var robots = await db.RoboMetadata
+        var robots = await context.RoboMetadata
             .Where(x => x.MasterId == userId)
             .Select(x => new RoboDto
             {
@@ -36,7 +29,7 @@ public class RoboService : IRoboService
 
     public async Task<RoboDto> Details(Guid roboId)
     {
-        var robot = await db.RoboMetadata.SingleAsync(x => x.Id == roboId);
+        var robot = await context.RoboMetadata.SingleAsync(x => x.Id == roboId);
 
         return robot.ToDto();
     }
@@ -59,30 +52,30 @@ public class RoboService : IRoboService
             Description = dto.Description
         };
 
-        await db.RoboMetadata.AddAsync(entity);
-        await db.SaveChangesAsync();
+        await context.RoboMetadata.AddAsync(entity);
+        await context.SaveChangesAsync();
         return entity;
     }
 
     private async Task<RoboMetadata> Edit(RoboDto dto, Guid currentUserId)
     {
-        var entity = await db.RoboMetadata.SingleAsync(x => x.Id == dto.Id);
+        var entity = await context.RoboMetadata.SingleAsync(x => x.Id == dto.Id);
         if (entity.MasterId != currentUserId) throw new UnauthorizedAccessException();
 
         entity.Name = dto.Name;
         entity.Description = dto.Description;
 
-        await db.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return entity;
     }
 
     public async Task<IEnumerable<RoboDto>> Delete(Guid roboId, Guid currentUserId)
     {
-        var entity = await db.RoboMetadata.SingleAsync(x => x.Id == roboId);
+        var entity = await context.RoboMetadata.SingleAsync(x => x.Id == roboId);
         if (entity.MasterId != currentUserId) throw new UnauthorizedAccessException();
 
-        db.RoboMetadata.Remove(entity);
-        await db.SaveChangesAsync();
+        context.RoboMetadata.Remove(entity);
+        await context.SaveChangesAsync();
 
         return await List(currentUserId);
     }

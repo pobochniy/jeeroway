@@ -9,25 +9,18 @@ using System.Threading.Tasks;
 
 namespace Atheneum.Services;
 
-public class UsersService
+public class UsersService(ApplicationContext context)
 {
-    private readonly ApplicationContext db;
-
-    public UsersService(ApplicationContext context)
-    {
-        db = context;
-    }
-
     public async Task<IEnumerable<Profile>> GetProfiles()
     {
-        var res = await db.Profiles.ToArrayAsync();
+        var res = await context.Profiles.ToArrayAsync();
 
         return res;
     }
 
     public async Task<IEnumerable<RoleEnum>> GetRoles(Guid userId)
     {
-        var query = db.UserInRole
+        var query = context.UserInRole
             .Where(x => x.UserId == userId)
             .Select(x => x.RoleId);
 
@@ -37,12 +30,12 @@ public class UsersService
 
     public async Task SetRoles(Guid userId, IEnumerable<RoleEnum> roles)
     {
-        var currentRoles = await db.UserInRole
+        var currentRoles = await context.UserInRole
             .Where(x => x.UserId == userId)
             .ToArrayAsync();
 
-        db.UserInRole.RemoveRange(currentRoles);
-        await db.SaveChangesAsync();
+        context.UserInRole.RemoveRange(currentRoles);
+        await context.SaveChangesAsync();
 
         foreach (var role in roles)
         {
@@ -52,9 +45,9 @@ public class UsersService
                 RoleId = role
             };
 
-            db.UserInRole.Add(userInRole);
+            context.UserInRole.Add(userInRole);
         }
 
-        await db.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 }
