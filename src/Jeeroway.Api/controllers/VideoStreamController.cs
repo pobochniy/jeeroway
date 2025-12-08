@@ -5,7 +5,7 @@ using System.Text;
 namespace Jeeroway.Api.controllers;
 
 [ApiController]
-[Route("video")]
+[Route("api/video")]
 public class VideoStreamController : ControllerBase
 {
     private readonly Channel<byte[]> _frameChannel;
@@ -62,13 +62,13 @@ public class VideoStreamController : ControllerBase
 
     // Live MJPEG stream from in-memory broadcaster
     [HttpGet("live.mjpeg")]
-    public async Task LiveMjpeg()
+    public async Task LiveMjpeg([FromQuery] Guid roboId)
     {
         Response.StatusCode = 200;
         Response.Headers["Cache-Control"] = "no-cache";
         Response.ContentType = "multipart/x-mixed-replace; boundary=frame";
 
-        var subscription = _broadcaster.Subscribe();
+        var subscription = _broadcaster.Subscribe(roboId);
         try
         {
             await foreach (var frame in subscription.Reader.ReadAllAsync(HttpContext.RequestAborted))
@@ -87,7 +87,7 @@ public class VideoStreamController : ControllerBase
         }
         finally
         {
-            _broadcaster.Unsubscribe(subscription);
+            _broadcaster.Unsubscribe(roboId, subscription);
         }
     }
 

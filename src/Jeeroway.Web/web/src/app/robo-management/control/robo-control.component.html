@@ -1,6 +1,20 @@
 <h4>Robo Control</h4>
 
-<!--<a class="btn btn-info" (click)="reconnect()">{{}}</a>-->
+<div class="video-section mb-3">
+  <div class="video-controls mb-2">
+    @if (!isVideoStreamActive()) {
+      <button class="btn btn-success" (click)="startVideoStream()">Start Video Stream</button>
+    } @else {
+      <button class="btn btn-danger" (click)="stopVideoStream()">Stop Video Stream</button>
+    }
+  </div>
+  
+  @if (videoStreamUrl()) {
+    <div class="video-container">
+      <img [src]="videoStreamUrl()" alt="Robot Camera Stream" class="video-stream" />
+    </div>
+  }
+</div>
 
 <div class="controls">
   <div class="row">

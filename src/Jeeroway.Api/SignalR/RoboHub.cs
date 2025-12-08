@@ -1,30 +1,44 @@
-using System.Text.Json;
-using Atheneum.Dto.Chat;
 using Atheneum.Dto.Robo;
-using Atheneum.Enums;
 using Atheneum.Interface;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Jeeroway.Api.SignalR;
 
-public class RoboHub(IHubContext<ChatHub, IChatHub> hubContext, ILogger<RoboHub> logger) : Hub<IRoboHub>
+public class RoboHub(
+    IHubContext<ChatHub, IChatHub> hubContext, 
+    ILogger<RoboHub> logger,
+    UdpVideoReceiverService videoReceiver) : Hub<IRoboHub>
 {
     private readonly IHubContext<ChatHub, IChatHub> _hub = hubContext;
     private readonly ILogger<RoboHub> _logger = logger;
+    private readonly UdpVideoReceiverService _videoReceiver = videoReceiver;
 
     public override async Task OnConnectedAsync()
     {
-        var roboId = Context.GetHttpContext()?.Request.Query["roboId"].ToString();
+        var roboIdStr = Context.GetHttpContext()?.Request.Query["roboId"].ToString();
         
-        if (!string.IsNullOrEmpty(roboId))
+        if (!string.IsNullOrEmpty(roboIdStr) && Guid.TryParse(roboIdStr, out var roboId))
         {
             // Добавляем подключение в группу робота
             await Groups.AddToGroupAsync(Context.ConnectionId, $"robo_{roboId}");
-            _logger.LogInformation("Robot connected: RoboId={RoboId}, ConnectionId={ConnectionId}", roboId, Context.ConnectionId);
+            
+            // Регистрируем IP адрес робота для видеострима
+            var ipAddress = Context.GetHttpContext()?.Connection.RemoteIpAddress;
+            if (ipAddress != null)
+            {
+                _videoReceiver.RegisterRobot(ipAddress, roboId);
+                _logger.LogInformation("Robot connected: RoboId={RoboId}, ConnectionId={ConnectionId}, IP={IpAddress}", 
+                    roboId, Context.ConnectionId, ipAddress);
+            }
+            else
+            {
+                _logger.LogWarning("Robot connected without IP: RoboId={RoboId}, ConnectionId={ConnectionId}", 
+                    roboId, Context.ConnectionId);
+            }
         }
         else
         {
-            _logger.LogWarning("Connection without roboId: ConnectionId={ConnectionId}", Context.ConnectionId);
+            _logger.LogWarning("Connection without valid roboId: ConnectionId={ConnectionId}", Context.ConnectionId);
         }
 
         await base.OnConnectedAsync();
@@ -101,21 +115,27 @@ public class RoboHub(IHubContext<ChatHub, IChatHub> hubContext, ILogger<RoboHub>
     /// <summary>
     /// Серверный метод: принимает команду запуска видеострима от браузера (клиент → сервер).
     /// </summary>
-    public async Task StartVideoStreamForRobo(Guid roboId, VideoStreamConfigDto? config = null)
+    public async Task StartVideoStreamForRobo(string roboIdStr)
     {
         try
         {
+            if (!Guid.TryParse(roboIdStr, out var roboId))
+            {
+                _logger.LogError("Invalid roboId format: {RoboIdStr}", roboIdStr);
+                throw new ArgumentException($"Invalid roboId format: {roboIdStr}");
+            }
+
             _logger.LogInformation("StartVideoStreamForRobo: RoboId={RoboId}", roboId);
             
             var groupName = $"robo_{roboId}";
-            config ??= new VideoStreamConfigDto();
+            var config = new VideoStreamConfigDto();
             
             await Clients.Group(groupName).StartVideoStream(config);
             _logger.LogDebug("StartVideoStream invoked for RoboId={RoboId}", roboId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in StartVideoStreamForRobo for RoboId={RoboId}", roboId);
+            _logger.LogError(ex, "Error in StartVideoStreamForRobo for RoboId={RoboIdStr}", roboIdStr);
             throw;
         }
     }
@@ -123,10 +143,16 @@ public class RoboHub(IHubContext<ChatHub, IChatHub> hubContext, ILogger<RoboHub>
     /// <summary>
     /// Серверный метод: принимает команду остановки видеострима от браузера (клиент → сервер).
     /// </summary>
-    public async Task StopVideoStreamForRobo(Guid roboId)
+    public async Task StopVideoStreamForRobo(string roboIdStr)
     {
         try
         {
+            if (!Guid.TryParse(roboIdStr, out var roboId))
+            {
+                _logger.LogError("Invalid roboId format: {RoboIdStr}", roboIdStr);
+                throw new ArgumentException($"Invalid roboId format: {roboIdStr}");
+            }
+
             _logger.LogInformation("StopVideoStreamForRobo: RoboId={RoboId}", roboId);
             
             var groupName = $"robo_{roboId}";
@@ -136,7 +162,7 @@ public class RoboHub(IHubContext<ChatHub, IChatHub> hubContext, ILogger<RoboHub>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in StopVideoStreamForRobo for RoboId={RoboId}", roboId);
+            _logger.LogError(ex, "Error in StopVideoStreamForRobo for RoboId={RoboIdStr}", roboIdStr);
             throw;
         }
     }

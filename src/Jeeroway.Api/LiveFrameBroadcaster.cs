@@ -1,13 +1,14 @@
+using System.Collections.Concurrent;
 using System.Threading.Channels;
 
 namespace Jeeroway.Api;
 
 public class LiveFrameBroadcaster
 {
+    private readonly ConcurrentDictionary<Guid, HashSet<Channel<byte[]>>> _subscribersByRobo = new();
     private readonly object _sync = new();
-    private readonly HashSet<Channel<byte[]>> _subscribers = new();
 
-    public Channel<byte[]> Subscribe(int capacity = 10)
+    public Channel<byte[]> Subscribe(Guid roboId, int capacity = 10)
     {
         var ch = Channel.CreateBounded<byte[]>(new BoundedChannelOptions(capacity)
         {
@@ -15,33 +16,47 @@ public class LiveFrameBroadcaster
             SingleWriter = false,
             FullMode = BoundedChannelFullMode.DropOldest
         });
-        lock (_sync)
-        {
-            _subscribers.Add(ch);
-        }
+
+        _subscribersByRobo.AddOrUpdate(
+            roboId,
+            _ => new HashSet<Channel<byte[]>> { ch },
+            (_, existing) =>
+            {
+                lock (existing)
+                {
+                    existing.Add(ch);
+                }
+                return existing;
+            });
+
         return ch;
     }
 
-    public void Unsubscribe(Channel<byte[]> channel)
+    public void Unsubscribe(Guid roboId, Channel<byte[]> channel)
     {
-        lock (_sync)
+        if (_subscribersByRobo.TryGetValue(roboId, out var subscribers))
         {
-            _subscribers.Remove(channel);
+            lock (subscribers)
+            {
+                subscribers.Remove(channel);
+            }
         }
         channel.Writer.TryComplete();
     }
 
-    public void Broadcast(byte[] frame)
+    public void Broadcast(Guid roboId, byte[] frame)
     {
+        if (!_subscribersByRobo.TryGetValue(roboId, out var subscribers))
+            return;
+
         Channel<byte[]>[] subs;
-        lock (_sync)
+        lock (subscribers)
         {
-            subs = _subscribers.ToArray();
+            subs = subscribers.ToArray();
         }
 
         foreach (var ch in subs)
         {
-            // Best-effort non-blocking delivery; drop if subscriber is slow
             ch.Writer.TryWrite(frame);
         }
     }

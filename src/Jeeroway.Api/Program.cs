@@ -12,7 +12,11 @@ var frameChannel = Channel.CreateUnbounded<byte[]>();
 
 builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddHostedService<UdpListener>();
-builder.Services.AddHostedService<UdpVideoReceiverService>();
+
+// Регистрируем UdpVideoReceiverService как singleton и как HostedService
+builder.Services.AddSingleton<UdpVideoReceiverService>();
+builder.Services.AddHostedService(sp => sp.GetRequiredService<UdpVideoReceiverService>());
+
 builder.Services.AddSingleton(frameChannel);
 builder.Services.AddSingleton<RecordingSessionManager>();
 builder.Services.AddSingleton<LiveFrameBroadcaster>();

@@ -16,6 +16,8 @@ export class RoboControlComponent implements OnInit, OnDestroy {
   public buttonState = signal<RoboControlModel>(new RoboControlModel());
   public roboId: string = '';
   public isConnected = signal<boolean>(false);
+  public videoStreamUrl = signal<string | null>(null);
+  public isVideoStreamActive = signal<boolean>(false);
 
   constructor(private route: ActivatedRoute) {
     this.keyButtons = this.keyButtons.bind(this);
@@ -53,7 +55,7 @@ export class RoboControlComponent implements OnInit, OnDestroy {
 
   keyButtons(e: KeyboardEvent) {
     const key = e.key.toLowerCase();
-    
+
     // Маппинг русской раскладки на английскую
     const keyMap: Record<string, string> = {
       'ц': 'w', // W
@@ -61,9 +63,9 @@ export class RoboControlComponent implements OnInit, OnDestroy {
       'ф': 'a', // A
       'в': 'd'  // D
     };
-    
+
     const mappedKey = keyMap[key] || key;
-    
+
     if (['w', 'a', 's', 'd'].includes(mappedKey)) {
       if (e.type === 'keyup') {
         this.pushTheButton(mappedKey, false);
@@ -112,9 +114,51 @@ export class RoboControlComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.connection.invoke("PushControl", state)
-      .catch(err => console.error('Error invoking PushControl:', err));
+    this.connection.invoke("ReceiveControlFromBrowser", state)
+      .catch(err => console.error('Error invoking ReceiveControlFromBrowser:', err));
 
     // Отправка происходит только при изменении состояния кнопок
+  }
+
+  async startVideoStream() {
+    if (!this.isConnected()) {
+      console.warn('SignalR not connected, cannot start video stream');
+      return;
+    }
+
+    if (!this.roboId) {
+      console.warn('RoboId is empty, cannot start video stream');
+      return;
+    }
+
+    try {
+      await this.connection.invoke("StartVideoStreamForRobo", this.roboId);
+      this.videoStreamUrl.set(`api/video/live.mjpeg?roboId=${this.roboId}&t=${Date.now()}`);
+      this.isVideoStreamActive.set(true);
+      console.log('Video stream started for roboId:', this.roboId);
+    } catch (err) {
+      console.error('Error starting video stream:', err);
+    }
+  }
+
+  async stopVideoStream() {
+    if (!this.isConnected()) {
+      console.warn('SignalR not connected, cannot stop video stream');
+      return;
+    }
+
+    if (!this.roboId) {
+      console.warn('RoboId is empty, cannot stop video stream');
+      return;
+    }
+
+    try {
+      await this.connection.invoke("StopVideoStreamForRobo", this.roboId);
+      this.videoStreamUrl.set(null);
+      this.isVideoStreamActive.set(false);
+      console.log('Video stream stopped for roboId:', this.roboId);
+    } catch (err) {
+      console.error('Error stopping video stream:', err);
+    }
   }
 }
