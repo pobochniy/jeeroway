@@ -37,7 +37,7 @@ chmod +x setup-ssl.sh
 
 **Пример:**
 ```bash
-./setup-ssl.sh jeeroway.com admin@jeeroway.com
+./setup-ssl.sh img.jeeroway.ru admin@jeeroway.ru
 ```
 
 Скрипт автоматически:
