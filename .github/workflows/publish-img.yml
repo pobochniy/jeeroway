@@ -14,7 +14,7 @@ env:
 jobs:
 
   Build:
-    runs-on: self-hosted
+    runs-on: imgrunner
     steps:
       - name: checkout 🛎️
         uses: actions/checkout@v4
@@ -55,9 +55,9 @@ jobs:
           -p 443:8443
           -d 
           --name jimgs 
-          -v /etc/letsencrypt/live/${{ secrets.DOMAIN_NAME }}:/app/certs:ro
+          -v /etc/letsencrypt/live/${{ secrets.DOMAIN_NAME_IMG }}:/app/certs:ro
           --env ASPNETCORE_ENVIRONMENT=Release 
-          --env ConnectionStrings__ImgConnection=${{ secrets.MySqlImgDbConnection }}
+          --env ConnectionStrings__ImgConnection=${{ secrets.MYSQLIMGDBCONNECTION }}
           jeeroway-imgs:${{ steps.date.outputs.date }}
 
 
