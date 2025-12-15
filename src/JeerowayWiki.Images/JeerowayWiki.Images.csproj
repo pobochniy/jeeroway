@@ -20,4 +20,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Atheneum\Atheneum.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dockerfile" />
+    <AdditionalFiles Include="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
 </Project>
