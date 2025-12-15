@@ -1,0 +1,11 @@
+﻿(из src)
+dotnet ef migrations add Init --startup-project JeerowayWiki.Images --project Atheneum --context ImagesContext -o MigrationsImg
+
+(из src)
+dotnet ef database update --startup-project JeerowayWiki.Images --project Atheneum --context ImagesContext
+
+remove-migration
+
+update-database NAME_OF_MIGRATION
+
+script-migration

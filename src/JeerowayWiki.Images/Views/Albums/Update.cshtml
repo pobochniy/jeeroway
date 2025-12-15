@@ -16,8 +16,9 @@
         <label class="col-md-3 control-label" for="login">Type</label>
         <div class="col-md-9">
             <select name="type">
-                <option value="0" selected>Wiki</option>
-                <option value="1">Альбом выезда</option>
+                <option value="@AlbumEnum.trash" selected>Помойка</option>
+                <option value="@AlbumEnum.conf">Конфы</option>
+                <option value="@AlbumEnum.wiki">Вики</option>
             </select>
         </div>
     </div>

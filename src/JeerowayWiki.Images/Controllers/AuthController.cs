@@ -13,24 +13,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JeerowayWiki.Images.Controllers;
 
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 [AllowAnonymous]
-public class AuthController : Controller
+public class AuthController(AuthService service) : Controller
 {
-    private readonly AuthService service;
-
-    public AuthController(AuthService service)
-    {
-        this.service = service;
-    }
-
-    [HttpGet("[action]")]
+    [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> Register(RegisterDto model, CancellationToken ct)
     {
         try
@@ -51,7 +44,7 @@ public class AuthController : Controller
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> LogIn(LoginDto model, CancellationToken ct)
     {
         if (ModelState.IsValid)
@@ -76,7 +69,7 @@ public class AuthController : Controller
         return BadRequest(ModelState);
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();

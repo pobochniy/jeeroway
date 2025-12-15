@@ -1,5 +1,26 @@
-﻿@using Atheneum.EntityImg;
+@using Atheneum.EntityImg;
+@using Atheneum.Enums;
 @model IEnumerable<Album>
+
+@{
+    var currentAlbum = Context.Request.Query["albumEnum"].ToString();
+    var activeAlbum = string.IsNullOrEmpty(currentAlbum) ? AlbumEnum.trash : Enum.Parse<AlbumEnum>(currentAlbum);
+}
+
+<div class="album-tabs">
+    <a href="/Albums/Index?albumEnum=@AlbumEnum.trash" class="album-tab @(activeAlbum == AlbumEnum.trash ? "active" : "")">
+        <i class="bi bi-trash"></i>
+        <span>Общие для сайта</span>
+    </a>
+    <a href="/Albums/Index?albumEnum=@AlbumEnum.conf" class="album-tab @(activeAlbum == AlbumEnum.conf ? "active" : "")">
+        <i class="bi bi-people"></i>
+        <span>Конференции</span>
+    </a>
+    <a href="/Albums/Index?albumEnum=@AlbumEnum.wiki" class="album-tab @(activeAlbum == AlbumEnum.wiki ? "active" : "")">
+        <i class="bi bi-book"></i>
+        <span>Вики</span>
+    </a>
+</div>
 
 <a class="btn btn-primary" href="/Albums/Update">Добавить альбом</a>
 
@@ -10,17 +31,28 @@
             <th style="width:60%">Description</th>
             <th style="min-width:90px">Created</th>
             <th></th>
-            <th></th>
+            @if (User.HasRole(RoleEnum.imgManagement))
+            {
+                <th></th>
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (Album item in Model)
+        @foreach (var item in Model)
         {
         <tr>
             <td>@item.Name</td>
             <td>@item.Description</td>
             <td>@item.Created.ToString("dd.MM.yyyy")</td>
-            <td><a class="btn btn-warning" href="/Albums/Update?albumId=@item.Id">Редактировать</a></td>
+            <td>
+                <a class="btn btn-info" href="/Albums/Show/@item.Id">
+                    <i class="bi-eye"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-warning" href="/Albums/Update?albumId=@item.Id">Редактировать</a>
+            </td>
             <td>
                 <form action="/Albums/Delete?albumId=@item.Id" method="post">
                     <input type="submit" class="btn btn-danger" href="#" value="Удалить"/>

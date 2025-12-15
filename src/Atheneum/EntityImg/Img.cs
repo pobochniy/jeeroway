@@ -15,9 +15,10 @@ namespace Atheneum.EntityImg
         [Required]
         public int AlbumId { get; set; }
 
+        [Required]
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public DateTime Created { get; set; }
 

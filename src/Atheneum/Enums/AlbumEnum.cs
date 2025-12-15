@@ -2,7 +2,8 @@
 {
     public enum AlbumEnum : byte
     {
+        trash,
+        conf,
         wiki,
-        onsiteWasteCollection,
     }
 }

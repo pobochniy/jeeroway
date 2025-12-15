@@ -1,0 +1,43 @@
+# first run manually: docker network create nginx-proxy-man
+version: '3'
+
+services:
+  webserver:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./frontend:/etc/nginx/html
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - nginx-proxy-man    # network outside
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  imagesdb:
+    image: mysql:8.0.31
+    container_name: imagesdbcontainer
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: "<type_root_password>"
+      MYSQL_DATABASE: imagesdb
+      MYSQL_USER: app
+      MYSQL_PASSWORD: "<type_password>"
+    ports:
+      - 3334:3306
+    networks:
+      - nginx-proxy-man
+
+networks:
+  nginx-proxy-man:
+    external: true
