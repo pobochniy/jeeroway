@@ -14,7 +14,7 @@ env:
 jobs:
 
   Build:
-    runs-on: imgrunner
+    runs-on: [self-hosted, imgrunner]
     steps:
       - name: checkout 🛎️
         uses: actions/checkout@v4
