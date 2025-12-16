@@ -14,6 +14,14 @@ public class Startup(IConfiguration configuration)
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | 
+                                       Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+        
         services.ConfigureServices(Configuration);
 
 
@@ -27,6 +35,8 @@ public class Startup(IConfiguration configuration)
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseForwardedHeaders();
+        
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -38,12 +48,6 @@ public class Startup(IConfiguration configuration)
         // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JeerowayWiki.Images v1"));
 
         app.UseStaticFiles();
-        
-        // Redirect HTTP to HTTPS in production
-        if (!env.IsDevelopment())
-        {
-            app.UseHttpsRedirection();
-        }
         
         app.UseAuthentication();
         app.UseAuthorization();
