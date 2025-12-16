@@ -47,14 +47,26 @@ jobs:
             echo 'container does not exists'
           fi
 
+      - name: ensure content directory exists
+        run: |
+          if [ ! -d ~/images-content ]; then
+            mkdir -p ~/images-content
+            echo "Created ~/images-content"
+          else
+            echo "Directory ~/images-content already exists"
+          fi
+
       - name: run new container
         run: |
           docker run \
             --restart unless-stopped \
             -p 80:8080 \
+            -p 443:8443 \
             -d \
             --name jimgs \
-            --env ASPNETCORE_ENVIRONMENT=Release \
+            -v /etc/letsencrypt/live/${{ secrets.DOMAIN_NAME_IMG }}:/publishfolder/certs:ro \
+            -v ~/images-content:/publishfolder/Content \
+            --env ASPNETCORE_ENVIRONMENT=Production \
             --env ConnectionStrings__ImgConnection="${{ secrets.MYSQLIMGDBCONNECTION }}" \
             jeeroway-imgs:${{ steps.date.outputs.date }}
 

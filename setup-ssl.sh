@@ -35,11 +35,22 @@ fi
 
 # 2. Stop any service on port 80
 echo ""
-echo "Step 2: Checking port 80..."
+echo "Step 2: Stopping services on port 80..."
+echo "Stopping docker container jimgs..."
+docker stop jimgs 2>/dev/null || echo "Container jimgs not running"
+
+# Wait a bit for port to be released
+sleep 2
+
+# Check if port is still in use
 if sudo lsof -Pi :80 -sTCP:LISTEN -t >/dev/null ; then
-    echo "Warning: Port 80 is in use. Stopping docker containers..."
-    docker stop jimgs 2>/dev/null || true
+    echo "Warning: Port 80 is still in use by:"
+    sudo lsof -Pi :80 -sTCP:LISTEN
+    echo ""
+    echo "Please stop the service manually and run this script again"
+    exit 1
 fi
+echo "Port 80 is free"
 
 # 3. Obtain certificate
 echo ""
@@ -98,10 +109,23 @@ echo "Certificate location: /etc/letsencrypt/live/$DOMAIN/"
 echo "PFX file: /etc/letsencrypt/live/$DOMAIN/certificate.pfx"
 echo ""
 echo "Next steps:"
-echo "1. Add GitHub secret: DOMAIN_NAME = $DOMAIN"
-echo "2. Run your GitHub Actions workflow to deploy the app"
-echo "3. Your app will be available at:"
+echo "1. Add GitHub secrets:"
+echo "   - DOMAIN_NAME_IMG = $DOMAIN"
+echo ""
+echo "2. Update appsettings.Production.json to enable HTTPS:"
+echo "   Add Kestrel HTTPS endpoint configuration"
+echo ""
+echo "3. Update GitHub Actions workflow:"
+echo "   - Add port mapping: -p 443:8443"
+echo "   - Add volume: -v /etc/letsencrypt/live/\${{ secrets.DOMAIN_NAME_IMG }}:/app/certs:ro"
+echo ""
+echo "4. Run your GitHub Actions workflow to deploy the app"
+echo ""
+echo "5. Your app will be available at:"
 echo "   - http://$DOMAIN (redirects to HTTPS)"
 echo "   - https://$DOMAIN"
 echo ""
 echo "Certificate will auto-renew every 60 days."
+echo ""
+echo "To restart the container now:"
+echo "  docker start jimgs"
