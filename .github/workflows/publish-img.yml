@@ -64,6 +64,7 @@ jobs:
             -p 443:8443 \
             -d \
             --name jimgs \
+            --network nginx-proxy-man
             -v /etc/letsencrypt/live/${{ secrets.DOMAIN_NAME_IMG }}:/publishfolder/certs:ro \
             -v $HOME/images-content:/publishfolder/Content \
             --env ASPNETCORE_ENVIRONMENT=Production \
