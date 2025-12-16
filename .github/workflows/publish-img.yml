@@ -65,7 +65,7 @@ jobs:
             -d \
             --name jimgs \
             -v /etc/letsencrypt/live/${{ secrets.DOMAIN_NAME_IMG }}:/publishfolder/certs:ro \
-            -v ~/images-content:/publishfolder/Content \
+            -v $HOME/images-content:/publishfolder/Content \
             --env ASPNETCORE_ENVIRONMENT=Production \
             --env ConnectionStrings__ImgConnection="${{ secrets.MYSQLIMGDBCONNECTION }}" \
             jeeroway-imgs:${{ steps.date.outputs.date }}
