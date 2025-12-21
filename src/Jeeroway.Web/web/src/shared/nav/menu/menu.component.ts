@@ -31,8 +31,13 @@ export class NavMenuComponent implements OnInit {
 
   // Local UI state uses Angular signals for zoneless + OnPush compatibility
   isExpanded = signal(false);
+  isWikiExpanded = signal(false);
 
   toggleMenu() {
     this.isExpanded.update(v => !v);
+  }
+
+  toggleWiki() {
+    this.isWikiExpanded.update(v => !v);
   }
 }

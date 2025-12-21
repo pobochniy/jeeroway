@@ -23,6 +23,31 @@
         <a [routerLink]='["/rolemanagement"]'><i class="fas fa-user-tag"></i>Role Management</a>
       </li>
     }
+    <li [class.active]="isWikiExpanded()">
+      <a (click)="toggleWiki()" style="cursor: pointer;">
+        <i class="fas fa-book"></i>Wiki
+        <i class="fas" [class.fa-chevron-down]="!isWikiExpanded()" [class.fa-chevron-up]="isWikiExpanded()" style="float: right;"></i>
+      </a>
+      @if (isWikiExpanded()) {
+        <ul class="list-unstyled">
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/wiki/overwiev"]'><i class="fas fa-circle"></i>Overview</a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/wiki/power"]'><i class="fas fa-circle"></i>Power</a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/wiki/rpi-install"]'><i class="fas fa-circle"></i>RPi Install</a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/wiki/rxtx"]'><i class="fas fa-circle"></i>RX/TX</a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/wiki/turntable"]'><i class="fas fa-circle"></i>Turntable</a>
+          </li>
+        </ul>
+      }
+    </li>
   </ul>
 
 </nav>

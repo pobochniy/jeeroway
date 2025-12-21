@@ -22,5 +22,9 @@ export const routes: Routes = [
     path: 'robo',
     loadChildren: () => import('./robo-management/robo-management-routing.module').then(m => m.routes)
   },
+  {
+    path: 'wiki',
+    loadChildren: () => import('./wiki/wiki-routing').then(m => m.routes)
+  },
   { path: '**', redirectTo: '' }
 ];
