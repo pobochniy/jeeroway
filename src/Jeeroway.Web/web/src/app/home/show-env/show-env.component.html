@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h2>Environment Configuration</h2>
+  
+  <div class="alert alert-info mt-3">
+    <h5>Current Environment Variables:</h5>
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entry of envEntries; track entry[0]) {
+          <tr>
+            <td><strong>{{ entry[0] }}</strong></td>
+            <td>{{ entry[1] }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3">
+    <a [routerLink]="['/']" class="btn btn-secondary">Back to Home</a>
+  </div>
+</div>

@@ -15,12 +15,20 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent)
   },
   {
+    path: 'home/env',
+    loadComponent: () => import('./home/show-env/show-env.component').then(m => m.ShowEnvComponent)
+  },
+  {
     path: 'profiles',
     loadChildren: () => import('./profiles/profiles.module').then(m => m.routes)
   },
   {
     path: 'robo',
     loadChildren: () => import('./robo-management/robo-management-routing.module').then(m => m.routes)
+  },
+  {
+    path: 'wiki',
+    loadChildren: () => import('./wiki/wiki-routing').then(m => m.routes)
   },
   { path: '**', redirectTo: '' }
 ];

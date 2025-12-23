@@ -98,7 +98,21 @@ a[data-toggle="collapse"] {
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
-  background: #6d7fcc;
+  background: #5a6bb8;
+}
+
+ul ul a:hover {
+  background: #4a5ba8 !important;
+}
+
+ul ul li.link-active a {
+  background: #4a5ba8 !important;
+}
+
+ul ul a i.fa-circle {
+  font-size: 0.5em;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
 ul.CTAs {
