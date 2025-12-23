@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-turntable',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './turntable.component.css',
 })
 export class TurntableComponent {
-
+  imagesUrl = environment.imagesUrl;
 }

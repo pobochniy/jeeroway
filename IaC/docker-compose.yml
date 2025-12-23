@@ -1,5 +1,5 @@
 # first run manually: docker network create nginx-proxy-man
-version: '3'
+version: '3.8'
 
 services:
   webserver:
@@ -23,20 +23,35 @@ services:
       - ./certbot/conf/:/etc/letsencrypt/:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  imagesdb:
+  jeerowaydb:
     image: mysql:8.0.31
-    container_name: imagesdbcontainer
+    container_name: jeerowaydbcontainer
     restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     environment:
       MYSQL_ROOT_PASSWORD: "<type_root_password>"
-      MYSQL_DATABASE: imagesdb
+      MYSQL_DATABASE: jeerowaydb
       MYSQL_USER: app
       MYSQL_PASSWORD: "<type_password>"
     ports:
-      - 3334:3306
+      - 3333:3306
     networks:
       - nginx-proxy-man
+
+#  imagesdb:
+#    image: mysql:8.0.31
+#    container_name: imagesdbcontainer
+#    restart: always
+#    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "<type_root_password>"
+#      MYSQL_DATABASE: imagesdb
+#      MYSQL_USER: app
+#      MYSQL_PASSWORD: "<type_password>"
+#    ports:
+#      - 3334:3306
+#    networks:
+#      - nginx-proxy-man
 
 networks:
   nginx-proxy-man:

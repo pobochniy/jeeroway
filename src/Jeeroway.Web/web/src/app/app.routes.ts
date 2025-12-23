@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent)
   },
   {
+    path: 'home/env',
+    loadComponent: () => import('./home/show-env/show-env.component').then(m => m.ShowEnvComponent)
+  },
+  {
     path: 'profiles',
     loadChildren: () => import('./profiles/profiles.module').then(m => m.routes)
   },

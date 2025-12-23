@@ -1,0 +1,70 @@
+name: Publish Angular
+
+on:
+  workflow_dispatch:
+
+env:
+  ANGULAR_PROJECT_PATH: src/Jeeroway.Web/web
+  BUILD_OUTPUT_PATH: src/Jeeroway.Web/web/dist/web/browser
+  DEPLOY_DIR: ~/frontend
+  BACKUP_DIR: ~/frontend-backup
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, jeeroway-vm]
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install dependencies 📦
+        working-directory: ${{ env.ANGULAR_PROJECT_PATH }}
+        run: npm ci
+
+      - name: Build Angular for production 🏗️
+        working-directory: ${{ env.ANGULAR_PROJECT_PATH }}
+        run: npm run build -- --configuration production
+
+      - name: Backup previous version 💾
+        run: |
+          # Очищаем папку бэкапа
+          if [ -d "${{ env.BACKUP_DIR }}" ]; then
+            rm -rf ${{ env.BACKUP_DIR }}/*
+            echo "Cleared ${{ env.BACKUP_DIR }}"
+          else
+            mkdir -p ${{ env.BACKUP_DIR }}
+            echo "Created ${{ env.BACKUP_DIR }}"
+          fi
+          
+          # Копируем текущую версию в бэкап, если она существует
+          if [ -d "${{ env.DEPLOY_DIR }}" ] && [ "$(ls -A ${{ env.DEPLOY_DIR }})" ]; then
+            cp -r ${{ env.DEPLOY_DIR }}/* ${{ env.BACKUP_DIR }}/
+            echo "Backed up current version to ${{ env.BACKUP_DIR }}"
+          else
+            echo "No previous version to backup"
+          fi
+
+      - name: Clear frontend directory 🧹
+        run: |
+          if [ -d "${{ env.DEPLOY_DIR }}" ]; then
+            rm -rf ${{ env.DEPLOY_DIR }}/*
+            echo "Cleared ${{ env.DEPLOY_DIR }}"
+          else
+            mkdir -p ${{ env.DEPLOY_DIR }}
+            echo "Created ${{ env.DEPLOY_DIR }}"
+          fi
+
+      - name: Deploy built files 🚀
+        run: |
+          cp -r ${{ env.BUILD_OUTPUT_PATH }}/* ${{ env.DEPLOY_DIR }}/
+          echo "Deployed files to ${{ env.DEPLOY_DIR }}"
+
+      - name: Verify deployment ✅
+        run: |
+          echo "Files in ${{ env.DEPLOY_DIR }}:"
+          ls -la ${{ env.DEPLOY_DIR }}
+          echo ""
+          echo "Backup files in ${{ env.BACKUP_DIR }}:"
+          ls -la ${{ env.BACKUP_DIR }}
+          echo ""
+          echo "ℹ️  To rollback to previous version, run:"
+          echo "   rm -rf ${{ env.DEPLOY_DIR }}/* && cp -r ${{ env.BACKUP_DIR }}/* ${{ env.DEPLOY_DIR }}/"
