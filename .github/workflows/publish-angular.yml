@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies 📦
         working-directory: ${{ env.ANGULAR_PROJECT_PATH }}
-        run: npm ci
+        run: npm install
 
       - name: Build Angular for production 🏗️
         working-directory: ${{ env.ANGULAR_PROJECT_PATH }}

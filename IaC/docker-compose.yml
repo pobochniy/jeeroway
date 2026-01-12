@@ -1,4 +1,10 @@
 # first run manually: docker network create nginx-proxy-man
+# docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d jeeroway.ru -d www.jeeroway.ru --email phoenix_net@bk.ru --agree-tos --no-eff-email
+# Step 1: Comment out HTTPS block in nginx.conf
+# Step 2: docker compose up -d webserver
+# Step 3: docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d jeeroway.ru -d www.jeeroway.ru
+# Step 4: Uncomment HTTPS block in nginx.conf
+# Step 5: docker compose restart webserver
 version: '3.8'
 
 services:
@@ -9,19 +15,20 @@ services:
       - 443:443
     restart: always
     volumes:
-      - ./frontend:/etc/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ../frontend:/etc/nginx/html
+      - ../nginx/conf:/etc/nginx/conf.d:ro
+      - ../certbot/www:/var/www/certbot/:ro
+      - ../certbot/conf/:/etc/nginx/ssl/:ro
     networks:
       - nginx-proxy-man    # network outside
 
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+      - ../certbot/www/:/var/www/certbot/:rw
+      - ../certbot/conf/:/etc/letsencrypt/:rw
+    # Uncomment entrypoint after obtaining certificates for auto-renewal
+    # entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   jeerowaydb:
     image: mysql:8.0.31
