@@ -1,0 +1,62 @@
+name: Publish Api
+
+on:
+  workflow_dispatch:
+
+env:
+  BUILD_DIR: buildfolder
+  PUBLISH_DIR: publishfolder
+  ARTIFACT_NAME: assembly
+  DOTNET_VERSION: "9.0.x"
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, jeeroway-vm]
+    steps:
+      - name: checkout 🛎️
+        uses: actions/checkout@v4
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: restore
+        run: dotnet restore
+      - name: build 🏗️
+        run: dotnet build --no-restore -c Release -o ${{ env.BUILD_DIR }}
+      - name: publish
+        run: dotnet publish src/jeeroway.Api/jeeroway.Api.csproj -c Release -o ${{ env.PUBLISH_DIR }}
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y_%m_%d__%H_%M_%S')"
+
+      - name: build docker image
+        run: docker build --tag jeeroway-api:${{ steps.date.outputs.date }} ${{ env.PUBLISH_DIR }}/.
+
+      - name: remove old container
+        run: >
+          if [ $( docker ps -a | grep "jeeroway-api" | wc -l ) -gt 0 ]; then 
+            docker rm $(docker stop $(docker ps -a | grep "jeeroway-api" | cut -d " " -f 1)) 
+          else
+            echo 'container does not exists'
+          fi
+
+      - name: run new container
+        run: |
+          docker run --restart unless-stopped -p 5000:5050 -d --name japi --network nginx-proxy-man \
+            --env ASPNETCORE_ENVIRONMENT=Release \
+            --env ConnectionStrings__AppConnection="${{ secrets.API_DB_CONNECTION_STRING }}" \
+            jeeroway-api:${{ steps.date.outputs.date }}
+      
+      - name: tag as latest
+        run: docker tag jeeroway-api:${{ steps.date.outputs.date }} jeeroway-api:latest
+
+  cleanup:
+    needs: build-and-deploy
+    uses: ./.github/workflows/shared/cleanup-old-images.yml
+    with:
+      image_name: jeeroway-api
+      keep_versions: 5
+      container_name: japi
+    

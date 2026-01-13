@@ -1,0 +1,69 @@
+name: Rollback Api
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to rollback to (e.g., 2026_01_13__10_30_45 or "latest" or "previous")'
+        required: true
+        default: 'previous'
+
+jobs:
+  rollback:
+    runs-on: [self-hosted, jeeroway-vm]
+    steps:
+      - name: Determine target version
+        id: version
+        run: |
+          if [ "${{ github.event.inputs.version }}" == "previous" ]; then
+            # Get the second most recent image (first is current)
+            TARGET=$(docker images jeeroway-api --format "{{.Tag}}" | grep -v "latest" | sed -n '2p')
+            if [ -z "$TARGET" ]; then
+              echo "No previous version found!"
+              exit 1
+            fi
+          elif [ "${{ github.event.inputs.version }}" == "latest" ]; then
+            TARGET="latest"
+          else
+            TARGET="${{ github.event.inputs.version }}"
+          fi
+          
+          # Verify image exists
+          if ! docker images jeeroway-api:$TARGET --format "{{.Tag}}" | grep -q "$TARGET"; then
+            echo "Image jeeroway-api:$TARGET not found!"
+            echo "Available versions:"
+            docker images jeeroway-api --format "{{.Tag}}"
+            exit 1
+          fi
+          
+          echo "target=$TARGET" >> $GITHUB_OUTPUT
+          echo "Rolling back to version: $TARGET"
+
+      - name: Stop current container
+        run: |
+          if [ $( docker ps -a | grep "japi" | wc -l ) -gt 0 ]; then 
+            docker rm $(docker stop $(docker ps -a | grep "japi" | cut -d " " -f 1))
+            echo "Stopped current container"
+          else
+            echo "No running container found"
+          fi
+
+      - name: Start rollback version
+        run: |
+          docker run --restart unless-stopped -p 5000:5050 -d --name japi --network nginx-proxy-man \
+            --env ASPNETCORE_ENVIRONMENT=Release \
+            --env ConnectionStrings__AppConnection="${{ secrets.API_DB_CONNECTION_STRING }}" \
+            jeeroway-api:${{ steps.version.outputs.target }}
+          echo "✅ Rolled back to version: ${{ steps.version.outputs.target }}"
+
+      - name: Verify container is running
+        run: |
+          sleep 3
+          if docker ps | grep -q "japi"; then
+            echo "✅ Container is running successfully"
+            docker ps | grep "japi"
+          else
+            echo "❌ Container failed to start"
+            docker logs japi
+            exit 1
+          fi
