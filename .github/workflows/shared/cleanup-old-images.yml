@@ -1,0 +1,73 @@
+name: Cleanup Old Docker Images
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        description: 'Docker image name to cleanup'
+        required: true
+        type: string
+      keep_versions:
+        description: 'Number of versions to keep'
+        required: false
+        type: number
+        default: 5
+      container_name:
+        description: 'Running container name to protect'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  cleanup:
+    runs-on: [self-hosted, jeeroway-vm]
+    steps:
+      - name: Cleanup old images
+        run: |
+          echo "🧹 Cleaning up old ${{ inputs.image_name }} images (keeping last ${{ inputs.keep_versions }} versions + latest)..."
+          
+          # Get current running image to protect it
+          CURRENT_IMAGE=""
+          if [ -n "${{ inputs.container_name }}" ] && docker ps | grep -q "${{ inputs.container_name }}"; then
+            CURRENT_IMAGE=$(docker inspect ${{ inputs.container_name }} --format='{{.Config.Image}}' | cut -d':' -f2)
+            echo "Protected (running): $CURRENT_IMAGE"
+          fi
+          
+          # Get all images except 'latest', sorted by creation date (newest first)
+          IMAGES_TO_CHECK=$(docker images ${{ inputs.image_name }} --format "{{.Tag}}" | grep -v "latest")
+          TOTAL_COUNT=$(echo "$IMAGES_TO_CHECK" | wc -l | tr -d ' ')
+          
+          echo "Total versioned images: $TOTAL_COUNT"
+          
+          if [ "$TOTAL_COUNT" -le ${{ inputs.keep_versions }} ]; then
+            echo "✅ Only $TOTAL_COUNT images, no cleanup needed"
+            exit 0
+          fi
+          
+          # Delete old images (keep first N)
+          KEEP_PLUS_ONE=$(({{ inputs.keep_versions }} + 1))
+          IMAGES_TO_DELETE=$(echo "$IMAGES_TO_CHECK" | tail -n +$KEEP_PLUS_ONE)
+          DELETED_COUNT=0
+          
+          echo ""
+          echo "🗑️  Images to delete:"
+          echo "$IMAGES_TO_DELETE"
+          echo ""
+          
+          for TAG in $IMAGES_TO_DELETE; do
+            if [ "$TAG" = "$CURRENT_IMAGE" ]; then
+              echo "⚠️  Skipping $TAG (currently running)"
+              continue
+            fi
+            
+            if docker rmi ${{ inputs.image_name }}:$TAG 2>/dev/null; then
+              echo "✅ Deleted: $TAG"
+              DELETED_COUNT=$((DELETED_COUNT + 1))
+            else
+              echo "⚠️  Failed to delete: $TAG (might be in use)"
+            fi
+          done
+          
+          echo ""
+          echo "✅ Cleanup completed: deleted $DELETED_COUNT images"
+          echo "📦 Remaining images: $(docker images ${{ inputs.image_name }} | tail -n +2 | wc -l)"
