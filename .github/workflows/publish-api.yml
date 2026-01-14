@@ -16,16 +16,16 @@ jobs:
       - name: checkout 🛎️
         uses: actions/checkout@v4
       - name: setup dotnet
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: restore
-        run: dotnet restore
+        run: dotnet restore src/Jeeroway.Api/Jeeroway.Api.csproj
       - name: build 🏗️
-        run: dotnet build --no-restore -c Release -o ${{ env.BUILD_DIR }}
+        run: dotnet build src/Jeeroway.Api/Jeeroway.Api.csproj --no-restore -c Release -o ${{ env.BUILD_DIR }}
       - name: publish
-        run: dotnet publish src/jeeroway.Api/jeeroway.Api.csproj -c Release -o ${{ env.PUBLISH_DIR }}
+        run: dotnet publish src/Jeeroway.Api/Jeeroway.Api.csproj --no-build -c Release -o ${{ env.PUBLISH_DIR }}
 
       - name: Get current date
         id: date
