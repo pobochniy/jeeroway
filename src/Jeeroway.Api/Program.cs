@@ -6,7 +6,9 @@ using Jeeroway.Api.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 
 // Настройка URL для прослушивания на всех интерфейсах
-builder.WebHost.UseUrls("http://192.168.1.33:5000");
+#if DEBUG
+    builder.WebHost.UseUrls("http://192.168.1.33:5000");
+#endif
 
 var frameChannel = Channel.CreateUnbounded<byte[]>();
 
