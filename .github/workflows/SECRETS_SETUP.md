@@ -123,7 +123,7 @@ export ConnectionStrings__AppConnection="Server=..."
 ## Управление дисковым пространством
 
 ### Автоматическая очистка
-Используется переиспользуемый workflow `shared/cleanup-old-images.yml`, который вызывается из:
+Используется переиспользуемый workflow `cleanup-old-images.yml`, который вызывается из:
 - `publish-api.yml` - после каждого деплоя
 - `list-api-versions.yml` - при ручном запуске
 
@@ -152,12 +152,12 @@ docker system df
 - Итого: ~1-1.5 GB дискового пространства
 
 ### Использование в других проектах
-Переиспользуемый workflow `shared/cleanup-old-images.yml` можно использовать для любых Docker образов:
+Переиспользуемый workflow `cleanup-old-images.yml` можно использовать для любых Docker образов:
 
 ```yaml
 jobs:
   cleanup:
-    uses: ./.github/workflows/shared/cleanup-old-images.yml
+    uses: ./.github/workflows/cleanup-old-images.yml
     with:
       image_name: my-app        # Имя образа
       keep_versions: 5          # Количество версий (по умолчанию 5)
@@ -167,11 +167,10 @@ jobs:
 ### Структура workflows
 ```
 .github/workflows/
-├── publish-api.yml           # Деплой API
-├── rollback-api.yml          # Откат на предыдущую версию
-├── list-api-versions.yml     # Просмотр и очистка версий
-└── shared/
-    └── cleanup-old-images.yml  # Переиспользуемая функция очистки
+├── publish-api.yml           # Деплой API (запускаемый вручную)
+├── rollback-api.yml          # Откат на предыдущую версию (запускаемый вручную)
+├── list-api-versions.yml     # Просмотр и очистка версий (запускаемый вручную)
+└── cleanup-old-images.yml    # Переиспользуемый workflow (вызывается другими)
 ```
 
 ## Рекомендации
