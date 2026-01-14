@@ -15,9 +15,6 @@ jobs:
     steps:
       - name: checkout 🛎️
         uses: actions/checkout@v4
-      
-      - name: version dotnet
-        run: dotnet --version
         
 #        first time need install
 #      - name: setup dotnet
