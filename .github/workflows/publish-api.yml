@@ -16,8 +16,12 @@ jobs:
       - name: checkout 🛎️
         uses: actions/checkout@v4
       
-      - name: verify dotnet version
-        run: dotnet --version
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+        env:
+          DOTNET_INSTALL_DIR: ${{ github.workspace }}/.dotnet
 
       - name: restore
         run: dotnet restore src/Jeeroway.Api/Jeeroway.Api.csproj
