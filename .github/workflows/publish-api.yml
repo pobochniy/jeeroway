@@ -54,7 +54,7 @@ jobs:
 
   cleanup:
     needs: build-and-deploy
-    uses: ./.github/workflows/shared/cleanup-old-images.yml
+    uses: ./.github/workflows/cleanup-old-images.yml
     with:
       image_name: jeeroway-api
       keep_versions: 5
