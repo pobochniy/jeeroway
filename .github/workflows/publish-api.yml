@@ -16,12 +16,16 @@ jobs:
       - name: checkout 🛎️
         uses: actions/checkout@v4
       
-      - name: setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-        env:
-          DOTNET_INSTALL_DIR: ${{ github.workspace }}/.dotnet
+      - name: version dotnet
+        run: dotnet --version
+        
+#        first time need install
+#      - name: setup dotnet
+#        uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: ${{ env.DOTNET_VERSION }}
+#        env:
+#          DOTNET_INSTALL_DIR: ${{ github.workspace }}/.dotnet
 
       - name: restore
         run: dotnet restore src/Jeeroway.Api/Jeeroway.Api.csproj
@@ -37,7 +41,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y_%m_%d__%H_%M_%S')"
 
       - name: build docker image
-        run: docker build --tag jeeroway-api:${{ steps.date.outputs.date }} ${{ env.PUBLISH_DIR }}/.
+        run: docker build --tag jeeroway-api:${{ steps.date.outputs.date }} ${{ env.PUBLISH_DIR }}
 
       - name: remove old container
         run: >
